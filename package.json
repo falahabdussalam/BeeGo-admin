@@ -1,0 +1,28 @@
+{
+  "name": "beego-admin",
+  "version": "1.0.0",
+  "description": "Admin Panel & Backend API for BeeGo E-Commerce Store (Virajpete, Kodagu)",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon server/index.js",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start": "node server/index.js",
+    "install-all": "npm install && cd client && npm install"
+  },
+  "keywords": ["beego", "admin-panel", "ecommerce", "express", "react", "tailwindcss", "virajpete"],
+  "author": "BeeGo Team",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.4"
+  }
+}

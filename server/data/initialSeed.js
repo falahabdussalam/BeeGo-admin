@@ -1,0 +1,673 @@
+// Pre-seeded database for BeeGo Virajpete Store & Admin Panel
+
+const initialCategories = [
+  {
+    id: "food",
+    name: "Food & Kitchen",
+    icon: "🍲",
+    color: "from-red-500 to-amber-600",
+    itemCount: 12,
+    description: "Authentic Kodava delicacies, Biryani, Tiffins & Hot Meals",
+    bannerImage: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=800&q=80",
+    isActive: true,
+    sortOrder: 1
+  },
+  {
+    id: "groceries",
+    name: "Groceries & Staples",
+    icon: "🛒",
+    color: "from-emerald-600 to-teal-600",
+    itemCount: 18,
+    description: "Rice, Grains, Oils, Spices & Daily Cooking Essentials",
+    bannerImage: "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80",
+    isActive: true,
+    sortOrder: 2
+  },
+  {
+    id: "medicines",
+    name: "Medicines & Health",
+    icon: "💊",
+    color: "from-blue-600 to-cyan-600",
+    itemCount: 8,
+    description: "OTC Medicines, First Aid, Supplements & Prescription Items",
+    bannerImage: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80",
+    isActive: true,
+    sortOrder: 3
+  },
+  {
+    id: "fruits-vegetables",
+    name: "Fruits & Veggies",
+    icon: "🍎",
+    color: "from-green-500 to-emerald-600",
+    itemCount: 14,
+    description: "Coorg Oranges, Farm-Fresh Vegetables & Local Greens",
+    bannerImage: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=800&q=80",
+    isActive: true,
+    sortOrder: 4
+  },
+  {
+    id: "coorg-specials",
+    name: "Coorg Specials",
+    icon: "☕",
+    color: "from-amber-700 to-orange-700",
+    itemCount: 9,
+    description: "Roasted Coorg Coffee, Pure Wild Honey, Spices & Chocolates",
+    bannerImage: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
+    isActive: true,
+    sortOrder: 5
+  },
+  {
+    id: "dairy",
+    name: "Dairy & Bakery",
+    icon: "🥛",
+    color: "from-sky-500 to-blue-600",
+    itemCount: 10,
+    description: "Fresh Milk, Curd, Paneer, Bakery Breads & Buns",
+    bannerImage: "https://images.unsplash.com/photo-1628088062854-d1870b4553da?auto=format&fit=crop&w=800&q=80",
+    isActive: true,
+    sortOrder: 6
+  },
+  {
+    id: "beverages",
+    name: "Beverages",
+    icon: "🥤",
+    color: "from-purple-500 to-indigo-600",
+    itemCount: 8,
+    description: "Tender Coconut Water, Coorg Passion Fruit Juices & Teas",
+    bannerImage: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80",
+    isActive: true,
+    sortOrder: 7
+  }
+];
+
+const initialProducts = [
+  // Food & Kitchen
+  {
+    id: "prod-101",
+    name: "Special Kodava Pandi Curry Combo (with Kadambuttu)",
+    category: "food",
+    price: 240,
+    originalPrice: 280,
+    unit: "1 Portion",
+    stock: 25,
+    inStock: true,
+    isPopular: true,
+    rating: 4.9,
+    reviewCount: 42,
+    badge: "Bestseller",
+    prepTime: "20-25 mins",
+    description: "Authentic Coorg spiced pork curry with 4 steamed Kadambuttu (rice dumplings). Traditional Kachampuli flavor.",
+    image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-102",
+    name: "Virajpete Thalassery Dum Biryani (Chicken)",
+    category: "food",
+    price: 180,
+    originalPrice: 210,
+    unit: "1 Full Plate",
+    stock: 40,
+    inStock: true,
+    isPopular: true,
+    rating: 4.8,
+    reviewCount: 88,
+    badge: "Hot Deal",
+    prepTime: "15-20 mins",
+    description: "Fragrant Jeerakasala rice, tender chicken pieces, fried onions, raisins, served with raita and pickle.",
+    image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-103",
+    name: "Coorg Akki Roti with Chicken Curry",
+    category: "food",
+    price: 160,
+    originalPrice: 190,
+    unit: "3 Rotis + Curry",
+    stock: 18,
+    inStock: true,
+    isPopular: false,
+    rating: 4.7,
+    reviewCount: 31,
+    badge: "Authentic",
+    prepTime: "20 mins",
+    description: "Soft rice flour rotis paired with spicy Kodava country chicken curry and coconut gravy.",
+    image: "https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-104",
+    name: "Crispy Egg Kothu Parotta",
+    category: "food",
+    price: 120,
+    originalPrice: 140,
+    unit: "1 Plate",
+    stock: 30,
+    inStock: true,
+    isPopular: true,
+    rating: 4.6,
+    reviewCount: 27,
+    badge: "Evening Snack",
+    prepTime: "15 mins",
+    description: "Shredded Malabar parotta tossed on hot tawa with eggs, onions, green chillies and spicy salna.",
+    image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=600&q=80"
+  },
+
+  // Groceries & Staples
+  {
+    id: "prod-201",
+    name: "Premium Sona Masoori Rice (5kg)",
+    category: "groceries",
+    price: 295,
+    originalPrice: 340,
+    unit: "5 kg Bag",
+    stock: 50,
+    inStock: true,
+    isPopular: true,
+    rating: 4.8,
+    reviewCount: 64,
+    badge: "Daily Essential",
+    prepTime: "Instant",
+    description: "Aged premium quality Sona Masoori raw rice, lightweight and aromatic for daily family meals.",
+    image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-202",
+    name: "Freedom Refined Sunflower Oil (1L Pouch)",
+    category: "groceries",
+    price: 135,
+    originalPrice: 155,
+    unit: "1 Litre",
+    stock: 65,
+    inStock: true,
+    isPopular: true,
+    rating: 4.7,
+    reviewCount: 52,
+    badge: "Best Price",
+    prepTime: "Instant",
+    description: "Enriched with Vitamins A & D, heart-friendly clear cooking sunflower oil.",
+    image: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-203",
+    name: "Aashirvaad Superior MP Sharbati Atta (5kg)",
+    category: "groceries",
+    price: 245,
+    originalPrice: 275,
+    unit: "5 kg",
+    stock: 35,
+    inStock: true,
+    isPopular: false,
+    rating: 4.9,
+    reviewCount: 40,
+    badge: "100% Whole Wheat",
+    prepTime: "Instant",
+    description: "Traditional stone chakki ground whole wheat flour for extra-soft and fluffy rotis.",
+    image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-204",
+    name: "Tata Salt Vacuum Evaporated Iodized (1kg)",
+    category: "groceries",
+    price: 28,
+    originalPrice: 30,
+    unit: "1 kg Packet",
+    stock: 120,
+    inStock: true,
+    isPopular: false,
+    rating: 4.9,
+    reviewCount: 95,
+    badge: "Desh Ka Namak",
+    prepTime: "Instant",
+    description: "Pure vacuum-evaporated iodized salt for everyday healthy nutrition.",
+    image: "https://images.unsplash.com/photo-1518110925495-5fe2fda0442c?auto=format&fit=crop&w=600&q=80"
+  },
+
+  // Medicines & Health
+  {
+    id: "prod-301",
+    name: "Dolo 650mg Paracetamol Tablets (Strip of 15)",
+    category: "medicines",
+    price: 32,
+    originalPrice: 35,
+    unit: "15 Tablets",
+    stock: 80,
+    inStock: true,
+    isPopular: true,
+    rating: 4.9,
+    reviewCount: 110,
+    badge: "OTC Quick Reliever",
+    prepTime: "Instant",
+    description: "Fast relief from fever, body aches and headaches. Certified OTC medicine.",
+    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-302",
+    name: "Dettol Antiseptic Liquid (250ml Bottle)",
+    category: "medicines",
+    price: 135,
+    originalPrice: 150,
+    unit: "250 ml",
+    stock: 40,
+    inStock: true,
+    isPopular: false,
+    rating: 4.9,
+    reviewCount: 45,
+    badge: "First Aid",
+    prepTime: "Instant",
+    description: "Effective first aid disinfectant for cuts, scrapes, hygiene, and sanitization.",
+    image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-303",
+    name: "Volini Joint & Muscle Pain Relief Spray (100g)",
+    category: "medicines",
+    price: 215,
+    originalPrice: 245,
+    unit: "100 g Spray",
+    stock: 25,
+    inStock: true,
+    isPopular: true,
+    rating: 4.8,
+    reviewCount: 38,
+    badge: "Instant Relief",
+    prepTime: "Instant",
+    description: "Micro-particles penetrate deep to give fast relief from backache, sprains and joint pain.",
+    image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=600&q=80"
+  },
+
+  // Fruits & Vegetables
+  {
+    id: "prod-401",
+    name: "Fresh Juicy Coorg Mandarins (Oranges 1kg)",
+    category: "fruits-vegetables",
+    price: 90,
+    originalPrice: 110,
+    unit: "1 kg",
+    stock: 45,
+    inStock: true,
+    isPopular: true,
+    rating: 5.0,
+    reviewCount: 76,
+    badge: "GI Tag Coorg",
+    prepTime: "Fresh Picked",
+    description: "Locally grown Kodagu sweet and tangy oranges, handpicked from organic estate orchards.",
+    image: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-402",
+    name: "Farm Fresh Country Tomatoes (1kg)",
+    category: "fruits-vegetables",
+    price: 35,
+    originalPrice: 45,
+    unit: "1 kg",
+    stock: 70,
+    inStock: true,
+    isPopular: true,
+    rating: 4.7,
+    reviewCount: 54,
+    badge: "Farm Fresh",
+    prepTime: "Direct Harvest",
+    description: "Firm, red, pesticide-free local tomatoes sourced daily from nearby Gonikoppal & Virajpete farms.",
+    image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-403",
+    name: "Fresh Coorg Ginger & Garlic Combo",
+    category: "fruits-vegetables",
+    price: 65,
+    originalPrice: 80,
+    unit: "250g + 250g",
+    stock: 35,
+    inStock: true,
+    isPopular: false,
+    rating: 4.6,
+    reviewCount: 22,
+    badge: "Kitchen Combo",
+    prepTime: "Instant",
+    description: "Strong aromatic Kodagu hill ginger and fresh garlic bulbs for daily curries.",
+    image: "https://images.unsplash.com/photo-1615485290382-441e4d049cb5?auto=format&fit=crop&w=600&q=80"
+  },
+
+  // Coorg Specials
+  {
+    id: "prod-501",
+    name: "Virajpete Pure Arabica Dark Roast Coffee (500g)",
+    category: "coorg-specials",
+    price: 320,
+    originalPrice: 380,
+    unit: "500 g Pouch",
+    stock: 40,
+    inStock: true,
+    isPopular: true,
+    rating: 5.0,
+    reviewCount: 92,
+    badge: "Signature Blend",
+    prepTime: "Estate Packed",
+    description: "100% shade-grown roasted and freshly ground filter coffee from the misty hills of Virajpete.",
+    image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-502",
+    name: "Raw Wild Honey from Western Ghats (500g)",
+    category: "coorg-specials",
+    price: 290,
+    originalPrice: 350,
+    unit: "500 g Glass Jar",
+    stock: 22,
+    inStock: true,
+    isPopular: true,
+    rating: 4.9,
+    reviewCount: 68,
+    badge: "100% Unprocessed",
+    prepTime: "Direct from Forest",
+    description: "Pure multi-floral wild honey harvested by tribal beekeepers in Kodagu forests.",
+    image: "https://images.unsplash.com/photo-1587049352846-4a222e784d38?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-503",
+    name: "Coorg Authentic Homemade Dark Chocolate (250g)",
+    category: "coorg-specials",
+    price: 180,
+    originalPrice: 220,
+    unit: "250 g Box",
+    stock: 30,
+    inStock: true,
+    isPopular: false,
+    rating: 4.8,
+    reviewCount: 35,
+    badge: "Artisanal",
+    prepTime: "Ready to Eat",
+    description: "Rich 60% cocoa homemade dark chocolates infused with roasted almond slivers.",
+    image: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=600&q=80"
+  },
+
+  // Dairy & Bakery
+  {
+    id: "prod-601",
+    name: "Nandini Fresh Toned Milk (500ml)",
+    category: "dairy",
+    price: 24,
+    originalPrice: 24,
+    unit: "500 ml Pouch",
+    stock: 90,
+    inStock: true,
+    isPopular: true,
+    rating: 4.9,
+    reviewCount: 150,
+    badge: "Morning Fresh",
+    prepTime: "Instant Chilled",
+    description: "Pasteurized homogenized toned milk by KMF Nandini, pasteurized daily.",
+    image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "prod-602",
+    name: "Fresh Local Malabar Bakery Sweet Bread (400g)",
+    category: "dairy",
+    price: 45,
+    originalPrice: 50,
+    unit: "400 g Loaf",
+    stock: 28,
+    inStock: true,
+    isPopular: false,
+    rating: 4.7,
+    reviewCount: 33,
+    badge: "Baked Today",
+    prepTime: "Freshly Baked",
+    description: "Extra soft, golden baked sweet tea bread from Virajpete town bakery.",
+    image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80"
+  },
+
+  // Beverages
+  {
+    id: "prod-701",
+    name: "Fresh Virajpete Tender Coconut (Elaneer)",
+    category: "beverages",
+    price: 50,
+    originalPrice: 60,
+    unit: "1 Whole Coconut",
+    stock: 35,
+    inStock: true,
+    isPopular: true,
+    rating: 4.9,
+    reviewCount: 72,
+    badge: "100% Natural",
+    prepTime: "Fresh Cut",
+    description: "Naturally sweet and cooling coconut water packed with electrolytes, cut open on dispatch.",
+    image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80"
+  }
+];
+
+const initialCoupons = [
+  {
+    id: "cp-1",
+    code: "VIRAJPETE100",
+    discountType: "fixed",
+    discountValue: 100,
+    minOrderValue: 499,
+    maxDiscount: 100,
+    description: "₹100 OFF on orders above ₹499 across Virajpete town!",
+    expiryDate: "2026-12-31",
+    isActive: true,
+    usageCount: 142
+  },
+  {
+    id: "cp-2",
+    code: "KODAGU50",
+    discountType: "percentage",
+    discountValue: 50,
+    minOrderValue: 199,
+    maxDiscount: 75,
+    description: "50% OFF up to ₹75 on local groceries, food & beverages",
+    expiryDate: "2026-12-31",
+    isActive: true,
+    usageCount: 285
+  },
+  {
+    id: "cp-3",
+    code: "FREEDEL",
+    discountType: "fixed",
+    discountValue: 20,
+    minOrderValue: 149,
+    maxDiscount: 20,
+    description: "FREE Delivery across Virajpete Town on all orders over ₹149",
+    expiryDate: "2026-12-31",
+    isActive: true,
+    usageCount: 512
+  }
+];
+
+const initialZones = [
+  {
+    id: "zone-1",
+    name: "Virajpete Clock Tower & Main Bazaar",
+    area: "Central Virajpete",
+    pincode: "571218",
+    deliveryFee: 15,
+    estimatedMinutes: "15-20 mins",
+    freeDeliveryAbove: 149,
+    isActive: true
+  },
+  {
+    id: "zone-2",
+    name: "College Road & Maletirike Hill",
+    area: "North Virajpete",
+    pincode: "571218",
+    deliveryFee: 20,
+    estimatedMinutes: "20-25 mins",
+    freeDeliveryAbove: 199,
+    isActive: true
+  },
+  {
+    id: "zone-3",
+    name: "Bethu & Kakotuparambu Road",
+    area: "East Virajpete",
+    pincode: "571218",
+    deliveryFee: 25,
+    estimatedMinutes: "25-30 mins",
+    freeDeliveryAbove: 249,
+    isActive: true
+  },
+  {
+    id: "zone-4",
+    name: "Arji & Balugodu Junction",
+    area: "South Virajpete",
+    pincode: "571218",
+    deliveryFee: 30,
+    estimatedMinutes: "30-35 mins",
+    freeDeliveryAbove: 299,
+    isActive: true
+  }
+];
+
+const initialRiders = [
+  {
+    id: "rider-1",
+    name: "Naveen Poovaiah",
+    phone: "+91 9448123456",
+    vehicle: "Hero Splendor (KA-12-E-4521)",
+    status: "available",
+    zone: "Virajpete Clock Tower & Main Bazaar",
+    rating: 4.9,
+    completedOrders: 340
+  },
+  {
+    id: "rider-2",
+    name: "Bopanna K.M",
+    phone: "+91 9845765432",
+    vehicle: "Honda Activa 6G (KA-12-Q-8819)",
+    status: "busy",
+    zone: "College Road & Maletirike Hill",
+    rating: 4.8,
+    completedOrders: 215
+  },
+  {
+    id: "rider-3",
+    name: "Suresh Gowda",
+    phone: "+91 8762345678",
+    vehicle: "TVS Jupiter (KA-12-R-1102)",
+    status: "available",
+    zone: "Bethu & Kakotuparambu Road",
+    rating: 4.7,
+    completedOrders: 180
+  }
+];
+
+const initialOrders = [
+  {
+    id: "ord-8891",
+    orderNumber: "VP-8891",
+    customerName: "Kavitha Chengappa",
+    customerPhone: "+91 9845012345",
+    address: {
+      fullAddress: "Rose Villa, Near Clock Tower, Main Bazaar",
+      landmark: "Opposite Canara Bank",
+      city: "Virajpete",
+      pincode: "571218"
+    },
+    items: [
+      { id: "prod-101", name: "Special Kodava Pandi Curry Combo (with Kadambuttu)", price: 240, quantity: 2 },
+      { id: "prod-701", name: "Fresh Virajpete Tender Coconut (Elaneer)", price: 50, quantity: 2 }
+    ],
+    itemTotal: 580,
+    deliveryFee: 0,
+    discount: 100,
+    couponCode: "VIRAJPETE100",
+    grandTotal: 480,
+    paymentMethod: "COD",
+    paymentStatus: "pending",
+    orderStatus: "preparing",
+    riderId: "rider-1",
+    riderName: "Naveen Poovaiah",
+    orderTime: new Date(Date.now() - 1000 * 60 * 18).toISOString(),
+    notes: "Please pack Kadambuttu extra hot!"
+  },
+  {
+    id: "ord-8890",
+    orderNumber: "VP-8890",
+    customerName: "Muthappa K.A",
+    customerPhone: "+91 9481239876",
+    address: {
+      fullAddress: "Estate House No 4, College Road",
+      landmark: "Near Kaveri College Gate",
+      city: "Virajpete",
+      pincode: "571218"
+    },
+    items: [
+      { id: "prod-501", name: "Virajpete Pure Arabica Dark Roast Coffee (500g)", price: 320, quantity: 1 },
+      { id: "prod-601", name: "Nandini Fresh Toned Milk (500ml)", price: 24, quantity: 2 },
+      { id: "prod-602", name: "Fresh Local Malabar Bakery Sweet Bread (400g)", price: 45, quantity: 1 }
+    ],
+    itemTotal: 413,
+    deliveryFee: 20,
+    discount: 0,
+    couponCode: "",
+    grandTotal: 433,
+    paymentMethod: "UPI",
+    paymentStatus: "paid",
+    orderStatus: "out_for_delivery",
+    riderId: "rider-2",
+    riderName: "Bopanna K.M",
+    orderTime: new Date(Date.now() - 1000 * 60 * 35).toISOString(),
+    notes: "Call when reaching the college junction."
+  },
+  {
+    id: "ord-8889",
+    orderNumber: "VP-8889",
+    customerName: "Dr. Sandeep Kumar",
+    customerPhone: "+91 9886543210",
+    address: {
+      fullAddress: "Govt Hospital Quarters, Hospital Road",
+      landmark: "Near Mother Teresa Hospital",
+      city: "Virajpete",
+      pincode: "571218"
+    },
+    items: [
+      { id: "prod-301", name: "Dolo 650mg Paracetamol Tablets (Strip of 15)", price: 32, quantity: 3 },
+      { id: "prod-302", name: "Dettol Antiseptic Liquid (250ml Bottle)", price: 135, quantity: 1 },
+      { id: "prod-401", name: "Fresh Juicy Coorg Mandarins (Oranges 1kg)", price: 90, quantity: 2 }
+    ],
+    itemTotal: 411,
+    deliveryFee: 0,
+    discount: 75,
+    couponCode: "KODAGU50",
+    grandTotal: 336,
+    paymentMethod: "UPI",
+    paymentStatus: "paid",
+    orderStatus: "delivered",
+    riderId: "rider-1",
+    riderName: "Naveen Poovaiah",
+    orderTime: new Date(Date.now() - 1000 * 60 * 90).toISOString(),
+    notes: "Left at front porch."
+  }
+];
+
+const initialSettings = {
+  storeName: "BeeGo Virajpete Express",
+  storeTagline: "30-Min Ultra Fast Delivery in Virajpete Town & Kodagu",
+  isOpen: true,
+  emergencyNotice: "",
+  whatsappNumber: "+918105326568",
+  cleanWhatsapp: "918105326568",
+  contactEmail: "admin@beego.in",
+  address: "Clock Tower Road, Main Bazaar, Virajpete, Kodagu - 571218",
+  currency: "₹",
+  defaultDeliveryFee: 20,
+  freeDeliveryThreshold: 199,
+  avgDeliveryMinutes: 30,
+  maxDeliveryRadiusKm: 12,
+  operatingHours: "07:00 AM - 10:30 PM",
+  allowCod: true,
+  allowUpi: true,
+  enableSoundAlerts: true,
+  autoConfirmOrders: false,
+  corsOrigins: ["https://bee-go.vercel.app", "http://localhost:5173", "http://localhost:3000"]
+};
+
+module.exports = {
+  initialCategories,
+  initialProducts,
+  initialCoupons,
+  initialZones,
+  initialRiders,
+  initialOrders,
+  initialSettings
+};
