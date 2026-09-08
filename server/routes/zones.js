@@ -25,6 +25,33 @@ router.put('/:id', (req, res) => {
   }
 });
 
+// POST /api/zones - create zone
+router.post('/', (req, res) => {
+  try {
+    const { name } = req.body;
+    if (!name) {
+      return res.status(400).json({ success: false, message: 'Zone name is required' });
+    }
+    const created = store.createZone(req.body);
+    res.status(201).json({ success: true, message: 'Zone created', data: created });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE /api/zones/:id - delete zone
+router.delete('/:id', (req, res) => {
+  try {
+    const success = store.deleteZone(req.params.id);
+    if (!success) {
+      return res.status(404).json({ success: false, message: 'Zone not found' });
+    }
+    res.json({ success: true, message: 'Zone deleted' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 // GET /api/zones/riders - list riders
 router.get('/riders/list', (req, res) => {
   try {
@@ -57,6 +84,19 @@ router.put('/riders/:id', (req, res) => {
       return res.status(404).json({ success: false, message: 'Rider not found' });
     }
     res.json({ success: true, message: 'Rider updated', data: updated });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// DELETE /api/zones/riders/:id - delete rider
+router.delete('/riders/:id', (req, res) => {
+  try {
+    const success = store.deleteRider(req.params.id);
+    if (!success) {
+      return res.status(404).json({ success: false, message: 'Rider not found' });
+    }
+    res.json({ success: true, message: 'Rider removed' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

@@ -22,19 +22,21 @@ export default {
           950: '#422006',
         },
         darkbg: {
-          DEFAULT: '#0A0A0C',
-          card: '#121215',
-          sidebar: '#0E0E11',
-          border: '#222228',
-          hover: '#18181D'
+          DEFAULT: '#09090b',
+          card: '#18181b',
+          sidebar: '#111114',
+          border: '#27272a',
+          hover: '#202024'
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'glow-yellow': '0 0 25px -5px rgba(234, 179, 8, 0.3)',
-        'glow-emerald': '0 0 25px -5px rgba(16, 185, 129, 0.3)',
+        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.08)',
+        'glow-yellow': '0 2px 8px -1px rgba(234, 179, 8, 0.25)',
+        'glow-emerald': '0 2px 8px -1px rgba(16, 185, 129, 0.25)',
       }
     },
   },

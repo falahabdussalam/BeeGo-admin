@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Tag, Edit2, Trash2, CheckCircle2, Clock, Zap } from 'lucide-react';
+import { Plus, Tag, Edit2, Trash2 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { api } from '../services/api';
 import CouponModal from '../components/CouponModal';
@@ -36,11 +36,11 @@ export default function Coupons() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">
-            Coupons & Promo Codes
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
+            Coupons & Discounts
           </h1>
-          <p className="text-xs text-gray-500 font-medium">
-            Manage checkout discounts, free delivery codes & Virajpete campaigns
+          <p className="text-xs text-gray-500 dark:text-zinc-400">
+            Create promotional discount codes and cart checkout incentives
           </p>
         </div>
 
@@ -49,92 +49,118 @@ export default function Coupons() {
             setEditingCoupon(null);
             setIsModalOpen(true);
           }}
-          className="px-4 py-2.5 rounded-2xl bg-beego-500 hover:bg-beego-600 text-black font-black text-xs shadow-glow-yellow flex items-center gap-1.5 transition-all"
+          className="btn-primary text-xs py-2 px-3.5"
         >
           <Plus className="w-4 h-4" />
-          <span>Create Promo Code</span>
+          <span>Create Coupon</span>
         </button>
       </div>
 
-      {/* Coupons List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {coupons.map(cpn => (
-          <div
-            key={cpn.id}
-            className="p-5 rounded-3xl bg-white dark:bg-darkbg-card border border-gray-100 dark:border-darkbg-border flex flex-col justify-between space-y-4 hover:shadow-md transition-all relative overflow-hidden"
-          >
-            {/* Top row */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-beego-500/10 text-beego-600 dark:text-beego-400">
-                    <Tag className="w-4 h-4" />
-                  </div>
-                  <span className="font-mono font-black text-base tracking-wider text-gray-900 dark:text-white">
-                    {cpn.code}
-                  </span>
-                </div>
-
-                <button
-                  onClick={() => handleToggleActive(cpn)}
-                  className={`text-[10px] font-black px-2.5 py-1 rounded-full transition-all ${
-                    cpn.isActive
-                      ? 'bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                      : 'bg-gray-100 dark:bg-darkbg text-gray-400'
-                  }`}
-                >
-                  {cpn.isActive ? 'Active' : 'Paused'}
-                </button>
-              </div>
-
-              {/* Discount Value */}
-              <div className="p-3 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200/50 dark:border-darkbg-border flex items-center justify-between">
-                <div>
-                  <span className="text-lg font-black text-beego-600 dark:text-beego-400">
-                    {cpn.discountType === 'percentage' ? `${cpn.discountValue}% OFF` : `₹${cpn.discountValue} OFF`}
-                  </span>
-                  <p className="text-[10px] text-gray-400">
-                    Min order: ₹{cpn.minOrderValue} {cpn.discountType === 'percentage' ? `(Max ₹${cpn.maxDiscount})` : ''}
-                  </p>
-                </div>
-                <div className="text-right text-[11px] font-bold text-gray-400">
-                  <span>{cpn.usageCount || 0} used</span>
-                </div>
-              </div>
-
-              <p className="text-xs text-gray-500 font-medium">
-                {cpn.description}
-              </p>
-            </div>
-
-            {/* Footer */}
-            <div className="pt-3 border-t border-gray-100 dark:border-darkbg-border flex items-center justify-between text-xs">
-              <span className="text-[11px] text-gray-400 flex items-center gap-1 font-semibold">
-                <Clock className="w-3.5 h-3.5" />
-                Exp: {cpn.expiryDate}
-              </span>
-
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => {
-                    setEditingCoupon(cpn);
-                    setIsModalOpen(true);
-                  }}
-                  className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-darkbg-hover text-gray-600 dark:text-gray-300"
-                >
-                  <Edit2 className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => handleDelete(cpn.id, cpn.code)}
-                  className="p-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-950 text-gray-400 hover:text-red-500"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
+      {/* Coupons List or Empty State */}
+      {coupons.length === 0 ? (
+        <div className="text-center py-16 p-8 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 space-y-3">
+          <div className="w-10 h-10 rounded-full bg-gray-100 dark:bg-zinc-800 flex items-center justify-center mx-auto text-gray-400">
+            <Tag className="w-5 h-5" />
           </div>
-        ))}
-      </div>
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+            No discount coupons active
+          </h3>
+          <p className="text-xs text-gray-500 dark:text-zinc-400 max-w-sm mx-auto">
+            Create discount vouchers (e.g. WELCOME10, SAVE50) to reward customers at checkout.
+          </p>
+          <button
+            onClick={() => {
+              setEditingCoupon(null);
+              setIsModalOpen(true);
+            }}
+            className="btn-primary text-xs py-2 px-4"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Create First Coupon</span>
+          </button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {coupons.map(cpn => (
+            <div
+              key={cpn.id}
+              className="p-4 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 flex flex-col justify-between space-y-3 shadow-sm hover:border-gray-300 dark:hover:border-zinc-700 transition-colors"
+            >
+              {/* Top row */}
+              <div className="space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-md bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400">
+                      <Tag className="w-4 h-4" />
+                    </div>
+                    <span className="font-mono font-bold text-base tracking-wider text-gray-900 dark:text-white">
+                      {cpn.code}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => handleToggleActive(cpn)}
+                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-md transition-colors ${
+                      cpn.isActive
+                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
+                        : 'bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400'
+                    }`}
+                  >
+                    {cpn.isActive ? 'Active' : 'Paused'}
+                  </button>
+                </div>
+
+                {/* Discount Value */}
+                <div className="p-3 rounded-lg bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700 flex items-center justify-between">
+                  <div>
+                    <span className="text-base font-bold text-amber-600 dark:text-amber-400">
+                      {cpn.discountType === 'percentage' ? `${cpn.discountValue}% OFF` : `₹${cpn.discountValue} OFF`}
+                    </span>
+                    <p className="text-[11px] text-gray-500 dark:text-zinc-400">
+                      Min order: ₹{cpn.minOrderValue} {cpn.discountType === 'percentage' && cpn.maxDiscount ? `(Max ₹${cpn.maxDiscount})` : ''}
+                    </p>
+                  </div>
+                  <div className="text-right text-[11px] font-medium text-gray-500 dark:text-zinc-400">
+                    <span>{cpn.usedCount || 0} uses</span>
+                  </div>
+                </div>
+
+                {cpn.description && (
+                  <p className="text-xs text-gray-500 dark:text-zinc-400">
+                    {cpn.description}
+                  </p>
+                )}
+              </div>
+
+              {/* Actions Footer */}
+              <div className="pt-2 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-between text-xs text-gray-400">
+                <span className="text-[11px]">
+                  Exp: {cpn.expiryDate || 'No expiry'}
+                </span>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => {
+                      setEditingCoupon(cpn);
+                      setIsModalOpen(true);
+                    }}
+                    className="p-1.5 rounded-md text-gray-500 hover:text-gray-900 dark:text-zinc-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800"
+                    title="Edit Coupon"
+                  >
+                    <Edit2 className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(cpn.id, cpn.code)}
+                    className="p-1.5 rounded-md text-gray-500 hover:text-rose-600 dark:text-zinc-400 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40"
+                    title="Delete Coupon"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Coupon Modal */}
       <CouponModal

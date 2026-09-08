@@ -45,7 +45,7 @@ function AdminShell() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-darkbg text-gray-900 dark:text-gray-100 flex transition-colors duration-200">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#09090b] text-gray-900 dark:text-zinc-100 flex transition-colors duration-150">
       {/* Navigation Sidebar */}
       <Sidebar
         isOpen={isSidebarOpen}
@@ -53,17 +53,15 @@ function AdminShell() {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 lg:pl-72 flex flex-col min-w-0">
+      <div className="flex-1 lg:pl-64 flex flex-col min-w-0">
         <Header onMenuClick={() => setIsSidebarOpen(true)} />
 
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-32 space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-beego-500 text-black flex items-center justify-center text-2xl animate-bounce">
-                🐝
-              </div>
-              <p className="text-xs font-bold text-gray-400 animate-pulse">
-                Connecting to BeeGo Virajpete Command Hub...
+            <div className="flex flex-col items-center justify-center py-32 space-y-3">
+              <div className="w-8 h-8 rounded-full border-2 border-amber-500 border-t-transparent animate-spin" />
+              <p className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                Loading store data...
               </p>
             </div>
           ) : (

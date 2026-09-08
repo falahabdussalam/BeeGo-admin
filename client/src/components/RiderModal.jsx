@@ -8,8 +8,8 @@ export default function RiderModal({ isOpen, onClose, rider = null }) {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    vehicle: 'Hero Splendor (KA-12-E-4521)',
-    zone: 'Virajpete Clock Tower & Main Bazaar',
+    vehicle: '',
+    zone: '',
     status: 'available'
   });
   const [saving, setSaving] = useState(false);
@@ -20,15 +20,15 @@ export default function RiderModal({ isOpen, onClose, rider = null }) {
         name: rider.name || '',
         phone: rider.phone || '',
         vehicle: rider.vehicle || '',
-        zone: rider.zone || zones[0]?.name || 'Virajpete Clock Tower',
+        zone: rider.zone || (zones[0]?.name || 'Standard Area'),
         status: rider.status || 'available'
       });
     } else {
       setFormData({
         name: '',
-        phone: '+91 ',
+        phone: '',
         vehicle: '',
-        zone: zones[0]?.name || 'Virajpete Clock Tower',
+        zone: zones[0]?.name || 'Standard Area',
         status: 'available'
       });
     }
@@ -38,7 +38,7 @@ export default function RiderModal({ isOpen, onClose, rider = null }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone) {
+    if (!formData.name.trim() || !formData.phone.trim()) {
       showToast('Rider name and contact phone are required', 'error');
       return;
     }
@@ -50,7 +50,7 @@ export default function RiderModal({ isOpen, onClose, rider = null }) {
         showToast('Rider profile updated');
       } else {
         await api.createRider(formData);
-        showToast('New delivery partner registered! 🛵');
+        showToast('New delivery partner registered');
       }
       await refreshAllData(true);
       onClose();
@@ -62,111 +62,126 @@ export default function RiderModal({ isOpen, onClose, rider = null }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-darkbg-card border border-gray-100 dark:border-darkbg-border rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
-        <div className="p-6 border-b border-gray-100 dark:border-darkbg-border flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-beego-500/10 text-beego-600 dark:text-beego-400 flex items-center justify-center text-xl font-black">
-              🛵
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl w-full max-w-md overflow-hidden shadow-xl">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+              <Bike className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-gray-900 dark:text-white">
-                {rider ? 'Edit Rider Details' : 'Register New Delivery Partner'}
+              <h2 className="text-base font-semibold text-gray-900 dark:text-white">
+                {rider ? 'Edit Rider Profile' : 'Register Delivery Partner'}
               </h2>
-              <p className="text-xs text-gray-500 font-medium">
-                BeeGo Virajpete express delivery fleet
+              <p className="text-xs text-gray-500 dark:text-zinc-400">
+                Manage dispatch contact and assigned delivery area
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-white"
+            className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Rider Full Name</label>
+          <div>
+            <label className="control-label">
+              Rider Full Name <span className="text-rose-500">*</span>
+            </label>
             <input
               type="text"
               required
               value={formData.name}
               onChange={e => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g. Naveen Poovaiah"
-              className="w-full px-4 py-2.5 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200 dark:border-darkbg-border text-sm font-semibold text-gray-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-beego-500"
+              placeholder="e.g. Rahul Sharma"
+              className="control-input"
             />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Phone Number (WhatsApp)</label>
+          <div>
+            <label className="control-label">
+              Phone Number <span className="text-rose-500">*</span>
+            </label>
             <input
-              type="text"
+              type="tel"
               required
               value={formData.phone}
               onChange={e => setFormData({ ...formData, phone: e.target.value })}
-              placeholder="+91 9448123456"
-              className="w-full px-4 py-2.5 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200 dark:border-darkbg-border text-sm font-semibold text-gray-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-beego-500"
+              placeholder="+91 9876543210"
+              className="control-input"
             />
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Vehicle Model & Reg No</label>
-            <input
-              type="text"
-              value={formData.vehicle}
-              onChange={e => setFormData({ ...formData, vehicle: e.target.value })}
-              placeholder="e.g. Honda Activa 6G (KA-12-Q-8819)"
-              className="w-full px-4 py-2.5 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200 dark:border-darkbg-border text-xs font-semibold text-gray-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-beego-500"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Primary Delivery Zone</label>
-              <select
-                value={formData.zone}
-                onChange={e => setFormData({ ...formData, zone: e.target.value })}
-                className="w-full px-3 py-2.5 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200 dark:border-darkbg-border text-xs font-bold text-gray-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-beego-500"
-              >
-                {zones.map(z => (
-                  <option key={z.id} value={z.name}>
-                    {z.name}
-                  </option>
-                ))}
-              </select>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="control-label">Vehicle Details</label>
+              <input
+                type="text"
+                value={formData.vehicle}
+                onChange={e => setFormData({ ...formData, vehicle: e.target.value })}
+                placeholder="e.g. Motorcycle / Scooter"
+                className="control-input"
+              />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Availability Status</label>
-              <select
-                value={formData.status}
-                onChange={e => setFormData({ ...formData, status: e.target.value })}
-                className="w-full px-3 py-2.5 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200 dark:border-darkbg-border text-xs font-bold text-gray-900 dark:text-white focus:outline-hidden focus:ring-2 focus:ring-beego-500"
-              >
-                <option value="available">🟢 Available for Dispatch</option>
-                <option value="busy">🟡 Out on Delivery</option>
-                <option value="offline">⚪ Offline</option>
-              </select>
+            <div>
+              <label className="control-label">Assigned Zone</label>
+              {zones.length > 0 ? (
+                <select
+                  value={formData.zone}
+                  onChange={e => setFormData({ ...formData, zone: e.target.value })}
+                  className="control-select"
+                >
+                  {zones.map(z => (
+                    <option key={z.id} value={z.name}>
+                      {z.name}
+                    </option>
+                  ))}
+                  <option value="Primary Area">Primary Area</option>
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={formData.zone}
+                  onChange={e => setFormData({ ...formData, zone: e.target.value })}
+                  placeholder="e.g. Downtown Area"
+                  className="control-input"
+                />
+              )}
             </div>
           </div>
 
-          <div className="pt-4 border-t border-gray-100 dark:border-darkbg-border flex items-center justify-end gap-3">
+          <div>
+            <label className="control-label">Initial Availability</label>
+            <select
+              value={formData.status}
+              onChange={e => setFormData({ ...formData, status: e.target.value })}
+              className="control-select"
+            >
+              <option value="available">Available for Orders</option>
+              <option value="busy">On Delivery</option>
+              <option value="offline">Offline</option>
+            </select>
+          </div>
+
+          <div className="pt-4 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-end gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-2xl font-bold text-xs text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-darkbg-hover transition-all"
+              className="btn-secondary"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="px-6 py-2.5 rounded-2xl bg-beego-500 hover:bg-beego-600 text-black font-extrabold text-xs shadow-glow-yellow flex items-center gap-2 transition-all"
+              className="btn-primary"
             >
               <Check className="w-4 h-4" />
-              <span>{rider ? 'Save Rider' : 'Register Rider'}</span>
+              <span>{rider ? 'Update Details' : 'Register Rider'}</span>
             </button>
           </div>
         </form>

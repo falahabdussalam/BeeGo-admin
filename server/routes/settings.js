@@ -45,11 +45,21 @@ router.post('/backup/restore', (req, res) => {
   }
 });
 
-// POST /api/settings/reset - reset to factory defaults
+// POST /api/settings/clear - clear all saved data
+router.post('/clear', (req, res) => {
+  try {
+    store.clearAllData();
+    res.json({ success: true, message: 'All store data cleared successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// POST /api/settings/reset - reset to clean defaults
 router.post('/reset', (req, res) => {
   try {
     store.resetToDefault();
-    res.json({ success: true, message: 'Store reset to default factory data' });
+    res.json({ success: true, message: 'Store reset to clean defaults' });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

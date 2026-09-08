@@ -5,28 +5,25 @@ import {
   MessageSquare,
   Send,
   MapPin,
-  Clock,
   User,
   Phone,
   CreditCard,
-  Bike,
-  CheckCircle2,
-  AlertTriangle
+  Bike
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { api } from '../services/api';
 
 const STATUS_STEPS = [
-  { id: 'pending', label: 'Pending', color: 'bg-amber-500' },
-  { id: 'confirmed', label: 'Confirmed', color: 'bg-blue-500' },
-  { id: 'preparing', label: 'Preparing', color: 'bg-purple-500' },
-  { id: 'out_for_delivery', label: 'Out for Delivery', color: 'bg-orange-500' },
-  { id: 'delivered', label: 'Delivered', color: 'bg-emerald-500' },
-  { id: 'cancelled', label: 'Cancelled', color: 'bg-red-500' }
+  { id: 'pending', label: 'Pending', activeClass: 'bg-amber-500 text-black font-semibold' },
+  { id: 'confirmed', label: 'Confirmed', activeClass: 'bg-blue-600 text-white font-semibold' },
+  { id: 'preparing', label: 'Preparing', activeClass: 'bg-purple-600 text-white font-semibold' },
+  { id: 'out_for_delivery', label: 'Out for Delivery', activeClass: 'bg-orange-600 text-white font-semibold' },
+  { id: 'delivered', label: 'Delivered', activeClass: 'bg-emerald-600 text-white font-semibold' },
+  { id: 'cancelled', label: 'Cancelled', activeClass: 'bg-rose-600 text-white font-semibold' }
 ];
 
 export default function OrderModal({ isOpen, onClose, order }) {
-  const { riders, updateOrderStatus, showToast, settings } = useAdmin();
+  const { riders, updateOrderStatus, settings } = useAdmin();
   const [currentStatus, setCurrentStatus] = useState('pending');
   const [selectedRiderId, setSelectedRiderId] = useState('');
   const [waLinks, setWaLinks] = useState(null);
@@ -74,25 +71,22 @@ export default function OrderModal({ isOpen, onClose, order }) {
   });
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-darkbg-card border border-gray-100 dark:border-darkbg-border rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl w-full max-w-3xl overflow-hidden shadow-xl">
         {/* Header */}
-        <div className="p-6 border-b border-gray-100 dark:border-darkbg-border flex items-center justify-between no-print">
+        <div className="px-6 py-4 border-b border-gray-200 dark:border-zinc-800 flex items-center justify-between no-print">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-beego-500/10 text-beego-600 dark:text-beego-400 flex items-center justify-center text-xl font-black">
-              🛍️
-            </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-black text-gray-900 dark:text-white">
+                <h2 className="text-base font-semibold text-gray-900 dark:text-white">
                   Order #{order.orderNumber}
                 </h2>
-                <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 uppercase">
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 uppercase">
                   {currentStatus.replace(/_/g, ' ')}
                 </span>
               </div>
-              <p className="text-xs text-gray-500 font-medium">
-                Placed on {formattedTime} • Virajpete Town Express
+              <p className="text-xs text-gray-500 dark:text-zinc-400">
+                Placed on {formattedTime}
               </p>
             </div>
           </div>
@@ -100,16 +94,16 @@ export default function OrderModal({ isOpen, onClose, order }) {
           <div className="flex items-center gap-2">
             <button
               onClick={handlePrintReceipt}
-              className="p-2.5 rounded-2xl bg-gray-100 dark:bg-darkbg hover:bg-gray-200 text-gray-700 dark:text-gray-300 transition-all flex items-center gap-1.5 text-xs font-bold"
-              title="Print Kitchen / Delivery Slip"
+              className="btn-secondary text-xs py-1.5 px-3"
+              title="Print Receipt"
             >
-              <Printer className="w-4 h-4" />
-              <span className="hidden sm:inline">Print Slip</span>
+              <Printer className="w-3.5 h-3.5" />
+              <span>Print Slip</span>
             </button>
 
             <button
               onClick={onClose}
-              className="p-2 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-darkbg-hover transition-all"
+              className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800"
             >
               <X className="w-5 h-5" />
             </button>
@@ -117,11 +111,11 @@ export default function OrderModal({ isOpen, onClose, order }) {
         </div>
 
         {/* Modal Content */}
-        <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+        <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
           {/* Status Pipeline Buttons */}
-          <div className="no-print space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-gray-400 dark:text-gray-500">
-              Update Order Pipeline Status
+          <div className="no-print space-y-1.5">
+            <label className="text-xs font-semibold text-gray-500 dark:text-zinc-400">
+              Order Status Pipeline
             </label>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
               {STATUS_STEPS.map(step => {
@@ -130,10 +124,10 @@ export default function OrderModal({ isOpen, onClose, order }) {
                   <button
                     key={step.id}
                     onClick={() => handleStatusChange(step.id)}
-                    className={`px-3 py-2 rounded-2xl text-xs font-extrabold transition-all border ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                       isCurrent
-                        ? `${step.color} text-white border-transparent shadow-md scale-[1.02]`
-                        : 'bg-gray-50 dark:bg-darkbg border-gray-200 dark:border-darkbg-border text-gray-600 dark:text-gray-400 hover:border-beego-500'
+                        ? `${step.activeClass} border-transparent shadow-sm`
+                        : 'bg-gray-50 dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-700'
                     }`}
                   >
                     {step.label}
@@ -145,17 +139,17 @@ export default function OrderModal({ isOpen, onClose, order }) {
 
           {/* Quick WhatsApp Dispatch Action Bar */}
           {waLinks && (
-            <div className="no-print p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold">
-                  <MessageSquare className="w-5 h-5" />
+            <div className="no-print p-3.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center">
+                  <MessageSquare className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-black text-emerald-900 dark:text-emerald-300">
-                    Virajpete WhatsApp Fast Dispatch
+                  <h4 className="text-xs font-semibold text-emerald-900 dark:text-emerald-200">
+                    WhatsApp Quick Dispatch
                   </h4>
                   <p className="text-[11px] text-emerald-700 dark:text-emerald-400">
-                    Send instant formatted order updates with 1-click
+                    Send formatted order notifications with 1-click
                   </p>
                 </div>
               </div>
@@ -166,22 +160,24 @@ export default function OrderModal({ isOpen, onClose, order }) {
                     href={waLinks.customerUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-sm transition-all flex items-center gap-1.5"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold transition-colors"
                   >
                     <Send className="w-3.5 h-3.5" />
                     <span>Msg Customer</span>
                   </a>
                 )}
 
-                <a
-                  href={waLinks.riderUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-3 py-1.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-black text-xs font-extrabold shadow-sm transition-all flex items-center gap-1.5"
-                >
-                  <Bike className="w-3.5 h-3.5" />
-                  <span>Dispatch Rider</span>
-                </a>
+                {waLinks.riderUrl && (
+                  <a
+                    href={waLinks.riderUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-secondary text-xs py-1.5 px-3"
+                  >
+                    <Bike className="w-3.5 h-3.5" />
+                    <span>Dispatch Rider</span>
+                  </a>
+                )}
               </div>
             </div>
           )}
@@ -189,67 +185,69 @@ export default function OrderModal({ isOpen, onClose, order }) {
           {/* Customer & Delivery Details Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Customer Box */}
-            <div className="p-4 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200/60 dark:border-darkbg-border space-y-2">
-              <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider">
+            <div className="p-4 rounded-lg bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700 space-y-2">
+              <span className="text-[11px] font-semibold uppercase text-gray-500 dark:text-zinc-400 block">
                 Customer Information
               </span>
-              <div className="flex items-center gap-2 text-sm font-black text-gray-900 dark:text-white">
-                <User className="w-4 h-4 text-beego-500" />
+              <div className="flex items-center gap-2 text-sm font-semibold text-gray-900 dark:text-white">
+                <User className="w-4 h-4 text-amber-500" />
                 <span>{order.customerName}</span>
               </div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-gray-600 dark:text-gray-400">
+              <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-zinc-300">
                 <Phone className="w-3.5 h-3.5 text-gray-400" />
                 <span>{order.customerPhone || 'No phone provided'}</span>
               </div>
-              <div className="flex items-start gap-2 text-xs font-medium text-gray-600 dark:text-gray-400 pt-1">
-                <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 text-xs text-gray-600 dark:text-zinc-300 pt-1">
+                <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
                 <div>
-                  <p>{order.address?.fullAddress || 'Virajpete Town'}</p>
+                  <p>{order.address?.fullAddress || 'Store Pickup / Standard Delivery'}</p>
                   {order.address?.landmark && (
-                    <p className="text-[11px] text-gray-400 font-normal">Landmark: {order.address.landmark}</p>
+                    <p className="text-[11px] text-gray-400">Landmark: {order.address.landmark}</p>
                   )}
-                  <p className="text-[11px] text-gray-400">{order.address?.city} ({order.address?.pincode})</p>
+                  {order.address?.city && (
+                    <p className="text-[11px] text-gray-400">{order.address.city} {order.address?.pincode ? `(${order.address.pincode})` : ''}</p>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Payment & Rider Box */}
-            <div className="p-4 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200/60 dark:border-darkbg-border space-y-3">
-              <span className="text-[10px] font-black uppercase text-gray-400 tracking-wider">
-                Payment & Rider Assignment
+            <div className="p-4 rounded-lg bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700 space-y-3">
+              <span className="text-[11px] font-semibold uppercase text-gray-500 dark:text-zinc-400 block">
+                Payment & Rider
               </span>
 
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
+              <div className="flex items-center justify-between text-xs">
+                <span className="flex items-center gap-1.5 text-gray-600 dark:text-zinc-300">
                   <CreditCard className="w-4 h-4 text-emerald-500" />
-                  Payment:
+                  Payment Method:
                 </span>
-                <span className="px-2 py-0.5 rounded-lg bg-gray-200 dark:bg-darkbg-hover text-gray-800 dark:text-gray-200 font-extrabold uppercase">
+                <span className="px-2 py-0.5 rounded-md bg-gray-200 dark:bg-zinc-700 text-gray-800 dark:text-zinc-200 font-semibold uppercase">
                   {order.paymentMethod} ({order.paymentStatus})
                 </span>
               </div>
 
               <div className="space-y-1">
-                <label className="text-[11px] font-bold text-gray-600 dark:text-gray-400 flex items-center gap-1">
-                  <Bike className="w-3.5 h-3.5 text-beego-500" />
-                  Assigned Rider:
+                <label className="text-[11px] font-medium text-gray-600 dark:text-zinc-300 flex items-center gap-1">
+                  <Bike className="w-3.5 h-3.5 text-amber-500" />
+                  Assigned Delivery Rider:
                 </label>
                 <select
                   value={selectedRiderId}
                   onChange={e => handleRiderChange(e.target.value)}
-                  className="w-full px-3 py-1.5 rounded-xl bg-white dark:bg-darkbg-card border border-gray-200 dark:border-darkbg-border text-xs font-bold text-gray-900 dark:text-white focus:outline-hidden focus:ring-1 focus:ring-beego-500"
+                  className="control-select text-xs py-1.5"
                 >
-                  <option value="">-- Select Virajpete Rider --</option>
+                  <option value="">-- No Rider Assigned --</option>
                   {riders.map(r => (
                     <option key={r.id} value={r.id}>
-                      {r.name} ({r.vehicle})
+                      {r.name} ({r.vehicle || 'Rider'})
                     </option>
                   ))}
                 </select>
               </div>
 
               {order.notes && (
-                <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 text-[11px] text-amber-900 dark:text-amber-200 font-semibold">
+                <div className="p-2.5 rounded-md bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 text-xs text-amber-900 dark:text-amber-200">
                   Note: "{order.notes}"
                 </div>
               )}
@@ -259,19 +257,19 @@ export default function OrderModal({ isOpen, onClose, order }) {
           {/* Items Table & Total (Printable Receipt Container) */}
           <div id="printable-receipt" className="space-y-3">
             <div className="hidden print:block text-center border-b pb-2 mb-2">
-              <h1 className="text-xl font-black">{settings.storeName}</h1>
+              <h1 className="text-xl font-bold">{settings.storeName}</h1>
               <p className="text-xs">{settings.address}</p>
               <p className="text-xs">Order #{order.orderNumber} • {formattedTime}</p>
               <p className="text-xs">Customer: {order.customerName} ({order.customerPhone})</p>
             </div>
 
-            <span className="text-xs font-black uppercase tracking-wider text-gray-400 dark:text-gray-500 block">
-              Ordered Items ({order.items.length})
+            <span className="text-xs font-semibold uppercase text-gray-500 dark:text-zinc-400 block">
+              Ordered Items ({order.items?.length || 0})
             </span>
 
-            <div className="rounded-2xl border border-gray-100 dark:border-darkbg-border overflow-hidden">
+            <div className="rounded-lg border border-gray-200 dark:border-zinc-700 overflow-hidden">
               <table className="w-full text-left text-xs">
-                <thead className="bg-gray-50 dark:bg-darkbg text-gray-500 font-bold border-b border-gray-100 dark:border-darkbg-border">
+                <thead className="bg-gray-50 dark:bg-zinc-800/70 text-gray-500 dark:text-zinc-400 font-semibold border-b border-gray-200 dark:border-zinc-700">
                   <tr>
                     <th className="p-3">Item</th>
                     <th className="p-3 text-center">Qty</th>
@@ -279,13 +277,13 @@ export default function OrderModal({ isOpen, onClose, order }) {
                     <th className="p-3 text-right">Total</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100 dark:divide-darkbg-border">
-                  {order.items.map((item, idx) => (
-                    <tr key={idx} className="font-semibold text-gray-800 dark:text-gray-200">
-                      <td className="p-3">{item.name}</td>
+                <tbody className="divide-y divide-gray-200 dark:divide-zinc-700">
+                  {order.items?.map((item, idx) => (
+                    <tr key={idx} className="text-gray-800 dark:text-zinc-200">
+                      <td className="p-3 font-medium">{item.name}</td>
                       <td className="p-3 text-center">{item.quantity}</td>
                       <td className="p-3 text-right">₹{item.price}</td>
-                      <td className="p-3 text-right font-bold">₹{item.price * item.quantity}</td>
+                      <td className="p-3 text-right font-semibold">₹{item.price * item.quantity}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -293,38 +291,38 @@ export default function OrderModal({ isOpen, onClose, order }) {
             </div>
 
             {/* Bill Summary */}
-            <div className="p-4 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200/60 dark:border-darkbg-border space-y-1.5 text-xs font-bold text-gray-600 dark:text-gray-400">
+            <div className="p-3.5 rounded-lg bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700 space-y-1.5 text-xs text-gray-600 dark:text-zinc-400">
               <div className="flex justify-between">
                 <span>Items Subtotal</span>
-                <span className="text-gray-900 dark:text-white">₹{order.itemTotal}</span>
+                <span className="text-gray-900 dark:text-white font-medium">₹{order.itemTotal}</span>
               </div>
               <div className="flex justify-between">
                 <span>Delivery Charge</span>
-                <span className="text-gray-900 dark:text-white">
+                <span className="text-gray-900 dark:text-white font-medium">
                   {order.deliveryFee === 0 ? 'FREE' : `₹${order.deliveryFee}`}
                 </span>
               </div>
               {order.discount > 0 && (
-                <div className="flex justify-between text-emerald-600 dark:text-emerald-400">
+                <div className="flex justify-between text-emerald-600 dark:text-emerald-400 font-medium">
                   <span>Coupon Discount ({order.couponCode || 'PROMO'})</span>
                   <span>-₹{order.discount}</span>
                 </div>
               )}
-              <div className="pt-2 border-t border-gray-200 dark:border-darkbg-border flex justify-between text-sm font-black text-gray-900 dark:text-white">
+              <div className="pt-2 border-t border-gray-200 dark:border-zinc-700 flex justify-between text-sm font-bold text-gray-900 dark:text-white">
                 <span>Grand Total</span>
-                <span className="text-beego-600 dark:text-beego-400 text-base">₹{order.grandTotal}</span>
+                <span className="text-amber-600 dark:text-amber-400 text-base">₹{order.grandTotal}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="p-6 border-t border-gray-100 dark:border-darkbg-border flex items-center justify-end gap-3 no-print">
+        <div className="px-6 py-4 border-t border-gray-200 dark:border-zinc-800 flex items-center justify-end gap-2.5 no-print">
           <button
             onClick={onClose}
-            className="px-6 py-2.5 rounded-2xl bg-beego-500 hover:bg-beego-600 text-black font-extrabold text-xs shadow-glow-yellow transition-all"
+            className="btn-primary text-xs py-2 px-4"
           >
-            Done & Close
+            Close
           </button>
         </div>
       </div>

@@ -2,29 +2,22 @@ import React from 'react';
 import {
   BarChart,
   Bar,
-  AreaChart,
-  Area,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  CartesianGrid,
-  PieChart,
-  Pie,
-  Cell
+  CartesianGrid
 } from 'recharts';
 import {
   IndianRupee,
   ShoppingBag,
   TrendingUp,
-  CreditCard,
   Package,
-  Activity
+  Activity,
+  BarChart2
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import StatsCard from '../components/StatsCard';
-
-const PIE_COLORS = ['#eab308', '#10b981', '#3b82f6', '#8b5cf6', '#f43f5e', '#06b6d4', '#f97316'];
 
 export default function Analytics() {
   const { analytics, orders, products, categories } = useAdmin();
@@ -34,136 +27,150 @@ export default function Analytics() {
   const upiCount = orders.filter(o => o.paymentMethod === 'UPI').length;
 
   const paymentData = [
-    { name: 'UPI / Online', value: upiCount || 12, color: '#10b981' },
-    { name: 'Cash on Delivery (COD)', value: codCount || 8, color: '#eab308' }
+    { name: 'UPI / Online', value: upiCount, color: '#10b981' },
+    { name: 'Cash on Delivery (COD)', value: codCount, color: '#f59e0b' }
   ];
 
   // Category items chart data
   const categoryData = categories.map(cat => ({
-    name: cat.name.split(' ')[0],
+    name: cat.name ? cat.name.split(' ')[0] : 'Unnamed',
     items: products.filter(p => p.category === cat.id).length
   }));
 
-  const revenueData = analytics?.revenueByDay || [
-    { day: 'Sun', revenue: 4500, orders: 12 },
-    { day: 'Mon', revenue: 3200, orders: 9 },
-    { day: 'Tue', revenue: 3800, orders: 11 },
-    { day: 'Wed', revenue: 4100, orders: 13 },
-    { day: 'Thu', revenue: 5200, orders: 16 },
-    { day: 'Fri', revenue: 6800, orders: 21 },
-    { day: 'Sat', revenue: 8400, orders: 26 }
-  ];
+  const revenueData = analytics?.revenueByDay || [];
+  const hasRevenueData = revenueData.some(d => d.revenue > 0);
 
   return (
     <div className="space-y-6 pb-12">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">
-          Sales & Performance Analytics
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
+          Sales & Revenue Analytics
         </h1>
-        <p className="text-xs text-gray-500 font-medium">
-          Detailed metrics, order volumes & revenue insights across Virajpete
+        <p className="text-xs text-gray-500 dark:text-zinc-400">
+          Key performance indicators, order distribution, and payment breakdown
         </p>
       </div>
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatsCard
-          title="Gross Sales (₹)"
-          value={analytics?.totalRevenue || 12450}
+          title="Gross Revenue"
+          value={analytics?.totalRevenue || 0}
           prefix="₹"
           icon={IndianRupee}
           color="emerald"
-          change="+24.8%"
-          isPositive={true}
-          subtitle="Delivered customer orders"
+          subtitle={totalDelivered.length ? `${totalDelivered.length} orders delivered` : "No delivered orders yet"}
         />
         <StatsCard
           title="Average Order Value"
-          value={analytics?.averageOrderValue || 420}
+          value={analytics?.averageOrderValue || 0}
           prefix="₹"
           icon={TrendingUp}
           color="beego"
-          subtitle="Per Virajpete customer"
+          subtitle={orders.length ? `Calculated across ${orders.length} orders` : "Awaiting first order"}
         />
         <StatsCard
-          title="Total Lifetime Orders"
+          title="Total Orders"
           value={orders.length}
           icon={ShoppingBag}
           color="blue"
-          subtitle={`${totalDelivered.length} successfully delivered`}
+          subtitle={`${totalDelivered.length} completed`}
         />
         <StatsCard
-          title="Catalog Health"
+          title="Active Products"
           value={products.length}
-          suffix=" products"
+          suffix=" items"
           icon={Package}
           color="purple"
-          subtitle="Active items in inventory"
+          subtitle={`${categories.length} categories active`}
         />
       </div>
 
       {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Daily Revenue Curve */}
-        <div className="p-6 rounded-3xl bg-white dark:bg-darkbg-card border border-gray-100 dark:border-darkbg-border space-y-4">
+        {/* Daily Revenue Bar Chart */}
+        <div className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 space-y-4">
           <div>
-            <h3 className="font-black text-base text-gray-900 dark:text-white">
-              Weekly Revenue Distribution (₹)
+            <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
+              7-Day Revenue Trajectory (₹)
             </h3>
-            <p className="text-xs text-gray-400">Daily earnings in Kodagu</p>
+            <p className="text-xs text-gray-500 dark:text-zinc-400">Daily earnings from delivered orders</p>
           </div>
 
           <div className="h-64 w-full pt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={revenueData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(150,150,150,0.1)" />
-                <XAxis dataKey="day" stroke="#888888" fontSize={11} tickLine={false} />
-                <YAxis stroke="#888888" fontSize={11} tickLine={false} tickFormatter={v => `₹${v}`} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#18181b',
-                    borderRadius: '16px',
-                    border: '1px solid #27272a',
-                    color: '#fff',
-                    fontSize: '12px',
-                    fontWeight: 'bold'
-                  }}
-                  formatter={(value) => [`₹${value}`, 'Revenue']}
-                />
-                <Bar dataKey="revenue" fill="#eab308" radius={[8, 8, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {hasRevenueData ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={revenueData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(150,150,150,0.1)" />
+                  <XAxis dataKey="day" stroke="#888888" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#888888" fontSize={11} tickLine={false} tickFormatter={v => `₹${v}`} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#18181b',
+                      borderRadius: '8px',
+                      border: '1px solid #27272a',
+                      color: '#fff',
+                      fontSize: '12px'
+                    }}
+                    formatter={(value) => [`₹${value}`, 'Revenue']}
+                  />
+                  <Bar dataKey="revenue" fill="#f59e0b" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-2">
+                <BarChart2 className="w-8 h-8 text-gray-300 dark:text-zinc-700" />
+                <p className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                  No sales recorded in the past 7 days
+                </p>
+                <p className="text-[11px] text-gray-400 dark:text-zinc-500">
+                  Revenue bars will automatically populate as orders arrive.
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Catalog Distribution */}
-        <div className="p-6 rounded-3xl bg-white dark:bg-darkbg-card border border-gray-100 dark:border-darkbg-border space-y-4">
+        <div className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 space-y-4">
           <div>
-            <h3 className="font-black text-base text-gray-900 dark:text-white">
-              Inventory Spread by Department
+            <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
+              Products per Category
             </h3>
-            <p className="text-xs text-gray-400">Item counts per category</p>
+            <p className="text-xs text-gray-500 dark:text-zinc-400">Inventory spread across departments</p>
           </div>
 
           <div className="h-64 w-full pt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={categoryData} layout="vertical" margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(150,150,150,0.1)" />
-                <XAxis type="number" stroke="#888888" fontSize={11} />
-                <YAxis dataKey="name" type="category" stroke="#888888" fontSize={11} width={80} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: '#18181b',
-                    borderRadius: '16px',
-                    border: '1px solid #27272a',
-                    color: '#fff',
-                    fontSize: '12px'
-                  }}
-                />
-                <Bar dataKey="items" fill="#10b981" radius={[0, 8, 8, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {categoryData.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={categoryData} layout="vertical" margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(150,150,150,0.1)" />
+                  <XAxis type="number" stroke="#888888" fontSize={11} />
+                  <YAxis dataKey="name" type="category" stroke="#888888" fontSize={11} width={80} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#18181b',
+                      borderRadius: '8px',
+                      border: '1px solid #27272a',
+                      color: '#fff',
+                      fontSize: '12px'
+                    }}
+                  />
+                  <Bar dataKey="items" fill="#10b981" radius={[0, 4, 4, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-2">
+                <Package className="w-8 h-8 text-gray-300 dark:text-zinc-700" />
+                <p className="text-xs font-medium text-gray-500 dark:text-zinc-400">
+                  No categories created yet
+                </p>
+                <p className="text-[11px] text-gray-400 dark:text-zinc-500">
+                  Create categories in the Categories tab to view distribution.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -171,31 +178,31 @@ export default function Analytics() {
       {/* Payment Split & Store Activity Logs */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Payment Methods */}
-        <div className="p-6 rounded-3xl bg-white dark:bg-darkbg-card border border-gray-100 dark:border-darkbg-border space-y-4">
+        <div className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 space-y-4">
           <div>
-            <h3 className="font-black text-base text-gray-900 dark:text-white">
+            <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
               Payment Breakdown
             </h3>
-            <p className="text-xs text-gray-400">UPI vs Cash on Delivery</p>
+            <p className="text-xs text-gray-500 dark:text-zinc-400">Payment methods used by customers</p>
           </div>
 
-          <div className="space-y-3 pt-2">
+          <div className="space-y-2.5 pt-1">
             {paymentData.map((pm, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200/60 dark:border-darkbg-border flex items-center justify-between"
+                className="p-3 rounded-lg bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 flex items-center justify-between"
               >
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2">
                   <div
-                    className="w-3 h-3 rounded-full"
+                    className="w-2.5 h-2.5 rounded-full"
                     style={{ backgroundColor: pm.color }}
                   />
-                  <span className="text-xs font-bold text-gray-800 dark:text-gray-200">
+                  <span className="text-xs font-medium text-gray-700 dark:text-zinc-300">
                     {pm.name}
                   </span>
                 </div>
-                <span className="text-xs font-black text-gray-900 dark:text-white">
-                  {pm.value} orders
+                <span className="text-xs font-semibold text-gray-900 dark:text-white">
+                  {pm.value} {pm.value === 1 ? 'order' : 'orders'}
                 </span>
               </div>
             ))}
@@ -203,37 +210,37 @@ export default function Analytics() {
         </div>
 
         {/* Activity Logs Stream (2 cols) */}
-        <div className="lg:col-span-2 p-6 rounded-3xl bg-white dark:bg-darkbg-card border border-gray-100 dark:border-darkbg-border space-y-4">
+        <div className="lg:col-span-2 p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 space-y-4">
           <div className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-beego-500" />
+            <Activity className="w-4 h-4 text-amber-500" />
             <div>
-              <h3 className="font-black text-base text-gray-900 dark:text-white">
-                Recent Store Activity Feed
+              <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
+                Store Activity Log
               </h3>
-              <p className="text-xs text-gray-400">Audit logs of catalog changes and order movements</p>
+              <p className="text-xs text-gray-500 dark:text-zinc-400">Audit trail of catalog and order changes</p>
             </div>
           </div>
 
-          <div className="space-y-2.5 max-h-[260px] overflow-y-auto pr-1">
+          <div className="space-y-2 max-h-[260px] overflow-y-auto">
             {analytics?.recentActivity && analytics.recentActivity.length > 0 ? (
               analytics.recentActivity.map(act => (
                 <div
                   key={act.id}
-                  className="p-3 rounded-2xl bg-gray-50 dark:bg-darkbg border border-gray-200/50 dark:border-darkbg-border flex items-center justify-between text-xs"
+                  className="p-2.5 rounded-lg bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 flex items-center justify-between text-xs"
                 >
                   <div>
-                    <span className="font-black text-gray-900 dark:text-white block">
+                    <span className="font-semibold text-gray-900 dark:text-white block">
                       {act.action}
                     </span>
-                    <span className="text-[11px] text-gray-500">{act.detail}</span>
+                    <span className="text-[11px] text-gray-500 dark:text-zinc-400">{act.detail}</span>
                   </div>
-                  <span className="text-[10px] text-gray-400 font-medium whitespace-nowrap ml-3">
+                  <span className="text-[10px] text-gray-400 dark:text-zinc-500 whitespace-nowrap ml-3">
                     {new Date(act.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
               ))
             ) : (
-              <p className="text-xs text-gray-400 py-6 text-center">No recent activity logs.</p>
+              <p className="text-xs text-gray-400 dark:text-zinc-500 py-8 text-center">No activity recorded yet.</p>
             )}
           </div>
         </div>

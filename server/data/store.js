@@ -63,13 +63,13 @@ class Store {
         {
           id: 'log-1',
           action: 'Store Initialized',
-          detail: 'Database seeded with Virajpete catalog & initial settings',
+          detail: 'Database initialized with clean store schema',
           timestamp: new Date().toISOString()
         }
       ]
     };
     this.save();
-    console.log('✨ Seeded default store data.');
+    console.log('✨ Clean store initialized.');
   }
 
   logActivity(action, detail) {
@@ -358,6 +358,30 @@ class Store {
     return this.data.zones[idx];
   }
 
+  createZone(zoneData) {
+    const newZone = {
+      id: 'zone-' + (zoneData.name ? zoneData.name.toLowerCase().replace(/[^a-z0-9]/g, '-') : Date.now()),
+      name: zoneData.name,
+      deliveryFee: Number(zoneData.deliveryFee) || 20,
+      minMinutes: Number(zoneData.minMinutes) || 20,
+      maxMinutes: Number(zoneData.maxMinutes) || 35,
+      isActive: zoneData.isActive !== false
+    };
+    this.data.zones.push(newZone);
+    this.logActivity('Zone Created', `Added delivery zone: ${newZone.name}`);
+    this.save();
+    return newZone;
+  }
+
+  deleteZone(id) {
+    const idx = this.data.zones.findIndex(z => z.id === id);
+    if (idx === -1) return false;
+    const removed = this.data.zones.splice(idx, 1)[0];
+    this.logActivity('Zone Deleted', `Deleted delivery zone: ${removed.name}`);
+    this.save();
+    return true;
+  }
+
   getRiders() {
     return this.data.riders;
   }
@@ -369,7 +393,7 @@ class Store {
       phone: riderData.phone,
       vehicle: riderData.vehicle || 'Bike',
       status: riderData.status || 'available',
-      zone: riderData.zone || 'Virajpete Clock Tower & Main Bazaar',
+      zone: riderData.zone || 'Primary Zone',
       rating: 5.0,
       completedOrders: 0
     };
@@ -385,6 +409,15 @@ class Store {
     this.data.riders[idx] = { ...this.data.riders[idx], ...updates };
     this.save();
     return this.data.riders[idx];
+  }
+
+  deleteRider(id) {
+    const idx = this.data.riders.findIndex(r => r.id === id);
+    if (idx === -1) return false;
+    const removed = this.data.riders.splice(idx, 1)[0];
+    this.logActivity('Rider Deleted', `Deleted delivery rider: ${removed.name}`);
+    this.save();
+    return true;
   }
 
   // --- Settings ---
@@ -421,15 +454,15 @@ class Store {
       });
     });
 
-    // Recent 7 days revenue (mock aggregated with actual)
+    // Recent 7 days revenue (actual order data)
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const revenueByDay = days.map((day, idx) => {
       const dayOrders = orders.filter(o => new Date(o.orderTime).getDay() === idx);
-      const dayRev = dayOrders.reduce((sum, o) => sum + o.grandTotal, 0);
+      const dayRev = dayOrders.reduce((sum, o) => sum + (o.grandTotal || 0), 0);
       return {
         day,
-        revenue: dayRev || Math.floor(1800 + Math.random() * 2400),
-        orders: dayOrders.length || Math.floor(5 + Math.random() * 8)
+        revenue: dayRev,
+        orders: dayOrders.length
       };
     });
 
@@ -460,6 +493,25 @@ class Store {
     this.data = backupData;
     this.save();
     this.logActivity('Database Restored', 'Restored database from uploaded backup');
+    return true;
+  }
+
+  clearAllData() {
+    this.data.products = [];
+    this.data.categories = [];
+    this.data.orders = [];
+    this.data.coupons = [];
+    this.data.zones = [];
+    this.data.riders = [];
+    this.data.activityLogs = [
+      {
+        id: 'log-' + Date.now(),
+        action: 'Store Cleared',
+        detail: 'All store data cleared by admin',
+        timestamp: new Date().toISOString()
+      }
+    ];
+    this.save();
     return true;
   }
 }

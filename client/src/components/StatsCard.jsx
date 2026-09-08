@@ -1,38 +1,48 @@
 import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-export default function StatsCard({ title, value, prefix = '', suffix = '', icon: Icon, change, isPositive, subtitle, color = 'beego' }) {
+export default function StatsCard({
+  title,
+  value,
+  prefix = '',
+  suffix = '',
+  icon: Icon,
+  change,
+  isPositive,
+  subtitle,
+  color = 'beego'
+}) {
   const colorMap = {
-    beego: 'text-beego-500 bg-beego-500/10 border-beego-500/20',
-    emerald: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
-    blue: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
-    purple: 'text-purple-500 bg-purple-500/10 border-purple-500/20',
-    rose: 'text-rose-500 bg-rose-500/10 border-rose-500/20'
+    beego: 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border-amber-200 dark:border-amber-800/60',
+    emerald: 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800/60',
+    blue: 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/40 border-blue-200 dark:border-blue-800/60',
+    purple: 'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/40 border-purple-200 dark:border-purple-800/60',
+    rose: 'text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-800/60'
   };
 
   return (
-    <div className="p-5 rounded-3xl bg-white dark:bg-darkbg-card border border-gray-100 dark:border-darkbg-border shadow-sm hover:shadow-md transition-all duration-200">
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+    <div className="p-4 sm:p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-sm hover:border-gray-300 dark:hover:border-zinc-700 transition-colors">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-semibold text-gray-500 dark:text-zinc-400">
           {title}
         </span>
         {Icon && (
-          <div className={`p-2.5 rounded-2xl border ${colorMap[color] || colorMap.beego}`}>
-            <Icon className="w-5 h-5" />
+          <div className={`p-2 rounded-lg border ${colorMap[color] || colorMap.beego}`}>
+            <Icon className="w-4 h-4" />
           </div>
         )}
       </div>
 
       <div className="flex items-baseline gap-2 mb-1">
-        <span className="text-2xl lg:text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+        <span className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
           {prefix}{value}{suffix}
         </span>
         {change && (
           <span
-            className={`inline-flex items-center text-xs font-extrabold px-2 py-0.5 rounded-full ${
+            className={`inline-flex items-center text-xs font-semibold px-2 py-0.5 rounded-md ${
               isPositive
-                ? 'text-emerald-600 bg-emerald-50 dark:bg-emerald-950/50 dark:text-emerald-400'
-                : 'text-rose-600 bg-rose-50 dark:bg-rose-950/50 dark:text-rose-400'
+                ? 'text-emerald-700 bg-emerald-50 dark:bg-emerald-950/50 dark:text-emerald-400'
+                : 'text-rose-700 bg-rose-50 dark:bg-rose-950/50 dark:text-rose-400'
             }`}
           >
             {isPositive ? <TrendingUp className="w-3 h-3 mr-0.5" /> : <TrendingDown className="w-3 h-3 mr-0.5" />}
@@ -42,7 +52,7 @@ export default function StatsCard({ title, value, prefix = '', suffix = '', icon
       </div>
 
       {subtitle && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+        <p className="text-xs text-gray-500 dark:text-zinc-400">
           {subtitle}
         </p>
       )}

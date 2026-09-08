@@ -61,15 +61,19 @@ export const api = {
 
   // Zones & Riders
   getZones: () => fetchJson('/zones'),
+  createZone: (zone) => fetchJson('/zones', { method: 'POST', body: JSON.stringify(zone) }),
   updateZone: (id, zone) => fetchJson(`/zones/${id}`, { method: 'PUT', body: JSON.stringify(zone) }),
+  deleteZone: (id) => fetchJson(`/zones/${id}`, { method: 'DELETE' }),
   getRiders: () => fetchJson('/zones/riders/list'),
   createRider: (rider) => fetchJson('/zones/riders', { method: 'POST', body: JSON.stringify(rider) }),
   updateRider: (id, rider) => fetchJson(`/zones/riders/${id}`, { method: 'PUT', body: JSON.stringify(rider) }),
+  deleteRider: (id) => fetchJson(`/zones/riders/${id}`, { method: 'DELETE' }),
 
   // Settings
   getSettings: () => fetchJson('/settings'),
   updateSettings: (settings) => fetchJson('/settings', { method: 'PUT', body: JSON.stringify(settings) }),
   restoreBackup: (backupData) => fetchJson('/settings/backup/restore', { method: 'POST', body: JSON.stringify(backupData) }),
+  clearStore: () => fetchJson('/settings/clear', { method: 'POST' }),
   resetStore: () => fetchJson('/settings/reset', { method: 'POST' }),
 
   // Analytics
