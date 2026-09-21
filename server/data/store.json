@@ -35,7 +35,7 @@
       "name": "Fruits & Veggies",
       "icon": "🥦",
       "color": "from-green-500 to-emerald-600",
-      "itemCount": 0,
+      "itemCount": 1,
       "isActive": true,
       "description": "Farm-Fresh Vegetables, Fruits & Greens",
       "bannerImage": "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=800&q=80"
@@ -101,7 +101,31 @@
       "bannerImage": "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=800&q=80"
     }
   ],
-  "products": [],
+  "products": [
+    {
+      "id": "prod-1789964180233",
+      "name": "Fresh Coorg Oranges (1kg)",
+      "category": "fruits-vegetables",
+      "storeId": "store-1789964180229",
+      "storeName": "Virajpete Fresh Farm Outlet",
+      "price": 120,
+      "originalPrice": 150,
+      "discountPercentage": 0,
+      "unit": "1 kg",
+      "stock": 30,
+      "inStock": true,
+      "isPopular": false,
+      "isVeg": true,
+      "rating": 4.8,
+      "reviewCount": 1,
+      "badge": "",
+      "prepTime": "15-20 mins",
+      "deliveryTime": "15-20 mins",
+      "description": "",
+      "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80",
+      "createdAt": "2026-09-21T04:16:20.233Z"
+    }
+  ],
   "coupons": [],
   "zones": [],
   "riders": [],
@@ -130,5 +154,87 @@
       "http://localhost:3000"
     ]
   },
-  "activityLogs": []
+  "activityLogs": [
+    {
+      "id": "log-1789964180233-892",
+      "action": "Product Added",
+      "detail": "Added product: Fresh Coorg Oranges (1kg) (Virajpete Fresh Farm Outlet)",
+      "timestamp": "2026-09-21T04:16:20.233Z"
+    },
+    {
+      "id": "log-1789964180229-308",
+      "action": "Store Added",
+      "detail": "Added partner store/outlet: Virajpete Fresh Farm Outlet",
+      "timestamp": "2026-09-21T04:16:20.229Z"
+    },
+    {
+      "id": "log-1789964180221-202",
+      "action": "Admin Login",
+      "detail": "Admin user logged into command center",
+      "timestamp": "2026-09-21T04:16:20.221Z"
+    }
+  ],
+  "stores": [
+    {
+      "id": "store-1",
+      "name": "Virajpete Express Central",
+      "category": "groceries",
+      "phone": "+91 8105326568",
+      "address": "Main Bazaar Road, Clock Tower, Virajpete, Kodagu 571218",
+      "deliveryTime": "20-30 mins",
+      "minOrder": 99,
+      "rating": 4.9,
+      "reviewCount": 142,
+      "isOpen": true,
+      "isActive": true,
+      "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80",
+      "description": "Central hub for ultra-fast grocery and daily essentials delivery in Virajpete town."
+    },
+    {
+      "id": "store-2",
+      "name": "BeeGo Fresh Grocers",
+      "category": "fruits-vegetables",
+      "phone": "+91 8105326568",
+      "address": "College Road, Near Private Bus Stand, Virajpete 571218",
+      "deliveryTime": "15-25 mins",
+      "minOrder": 49,
+      "rating": 4.8,
+      "reviewCount": 88,
+      "isOpen": true,
+      "isActive": true,
+      "image": "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=600&q=80",
+      "description": "Farm-fresh organic fruits, local greens, and farm produce."
+    },
+    {
+      "id": "store-3",
+      "name": "Coorg Heritage Spices & Coffee",
+      "category": "coorg-specials",
+      "phone": "+91 8105326568",
+      "address": "Clock Tower Junction, Virajpete 571218",
+      "deliveryTime": "25-35 mins",
+      "minOrder": 149,
+      "rating": 5,
+      "reviewCount": 65,
+      "isOpen": true,
+      "isActive": true,
+      "image": "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80",
+      "description": "Authentic estate-grown Coorg coffee, wild forest honey, homemade chocolates and spices."
+    },
+    {
+      "id": "store-1789964180229",
+      "name": "Virajpete Fresh Farm Outlet",
+      "category": "fruits-vegetables",
+      "phone": "+91 8105326568",
+      "address": "Clock Tower East, Virajpete",
+      "deliveryTime": "20 mins",
+      "minOrder": 99,
+      "rating": 4.9,
+      "reviewCount": 10,
+      "isOpen": true,
+      "isActive": true,
+      "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80",
+      "description": "Partner store in Virajpete Town",
+      "createdAt": "2026-09-21T04:16:20.229Z"
+    }
+  ]
 }

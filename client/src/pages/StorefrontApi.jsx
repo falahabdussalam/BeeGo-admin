@@ -125,6 +125,82 @@ export function useStoreCatalog() {
         </a>
       </div>
 
+      {/* Live Storefront Sync Diagnostic Banner */}
+      <div className="p-5 rounded-2xl bg-linear-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500 text-black flex items-center justify-center text-lg font-bold shadow-md shadow-amber-500/20">
+              ⚡
+            </div>
+            <div>
+              <h2 className="text-sm font-bold text-gray-900 dark:text-white">
+                Live Storefront Synchronization Status
+              </h2>
+              <p className="text-xs text-gray-600 dark:text-zinc-400">
+                Data configured in this admin portal synchronizes directly with{' '}
+                <a
+                  href="https://bee-go.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-amber-600 dark:text-amber-400 hover:underline"
+                >
+                  bee-go.vercel.app
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={fetchCatalogPreview}
+            disabled={loadingCatalog}
+            className="btn-primary text-xs py-2 px-3 self-start sm:self-auto"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loadingCatalog ? 'animate-spin' : ''}`} />
+            <span>Test Live Catalog Sync</span>
+          </button>
+        </div>
+
+        {/* Live Catalog Metrics */}
+        {catalogJson && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 text-xs">
+            <div className="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+              <span className="text-[10px] text-gray-400 block font-medium">Partner Stores</span>
+              <span className="text-lg font-bold text-gray-900 dark:text-white">
+                {catalogJson.stores?.length || 0}
+              </span>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium block">Active in catalog</span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+              <span className="text-[10px] text-gray-400 block font-medium">Categories</span>
+              <span className="text-lg font-bold text-gray-900 dark:text-white">
+                {catalogJson.categories?.length || 0}
+              </span>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium block">Ready for customers</span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+              <span className="text-[10px] text-gray-400 block font-medium">Active Products</span>
+              <span className="text-lg font-bold text-gray-900 dark:text-white">
+                {catalogJson.products?.length || 0}
+              </span>
+              <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-medium block">Live on storefront</span>
+            </div>
+
+            <div className="p-3 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+              <span className="text-[10px] text-gray-400 block font-medium">Store Status</span>
+              <span className="text-lg font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                {catalogJson.store?.isOpen !== false ? 'OPEN' : 'CLOSED'}
+              </span>
+              <span className="text-[10px] text-gray-400 block truncate">
+                {catalogJson.store?.name || 'BeeGo Store'}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* API Endpoints Directory */}
       <div className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 space-y-4 shadow-sm">
         <div className="flex items-center gap-2">
@@ -140,7 +216,15 @@ export function useStoreCatalog() {
               <span className="px-1.5 py-0.5 rounded-sm bg-emerald-600 text-white font-bold text-[10px]">GET</span>
               <span className="font-semibold text-gray-900 dark:text-white">/api/storefront/catalog</span>
             </div>
-            <p className="text-[11px] text-gray-500 dark:text-zinc-400">Complete bundle with categories, products, coupons & store status.</p>
+            <p className="text-[11px] text-gray-500 dark:text-zinc-400">Complete bundle with stores, categories, products, coupons & store status.</p>
+          </div>
+
+          <div className="p-3 rounded-lg bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700 space-y-1">
+            <div className="flex items-center gap-2 font-mono">
+              <span className="px-1.5 py-0.5 rounded-sm bg-emerald-600 text-white font-bold text-[10px]">GET</span>
+              <span className="font-semibold text-gray-900 dark:text-white">/api/stores</span>
+            </div>
+            <p className="text-[11px] text-gray-500 dark:text-zinc-400">List of all partner merchants and outlets in Virajpete.</p>
           </div>
 
           <div className="p-3 rounded-lg bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700 space-y-1">
@@ -157,14 +241,6 @@ export function useStoreCatalog() {
               <span className="font-semibold text-gray-900 dark:text-white">/api/storefront/order</span>
             </div>
             <p className="text-[11px] text-gray-500 dark:text-zinc-400">Places customer orders directly into admin dispatch queue.</p>
-          </div>
-
-          <div className="p-3 rounded-lg bg-gray-50 dark:bg-zinc-800/60 border border-gray-200 dark:border-zinc-700 space-y-1">
-            <div className="flex items-center gap-2 font-mono">
-              <span className="px-1.5 py-0.5 rounded-sm bg-emerald-600 text-white font-bold text-[10px]">GET</span>
-              <span className="font-semibold text-gray-900 dark:text-white">/api/storefront/status</span>
-            </div>
-            <p className="text-[11px] text-gray-500 dark:text-zinc-400">Ping store open/closed state and emergency notice.</p>
           </div>
         </div>
       </div>

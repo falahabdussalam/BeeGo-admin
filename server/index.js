@@ -8,6 +8,18 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Enable Private Network Access for live bee-go.vercel.app storefront calls
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, beego-api-key');
+  res.setHeader('Access-Control-Allow-Private-Network', 'true');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
+
 // Middleware
 app.use(cors({
   origin: '*',
@@ -26,6 +38,7 @@ app.use((req, res, next) => {
 
 // Import API routes
 const productsRouter = require('./routes/products');
+const storesRouter = require('./routes/stores');
 const categoriesRouter = require('./routes/categories');
 const ordersRouter = require('./routes/orders');
 const couponsRouter = require('./routes/coupons');
@@ -33,8 +46,11 @@ const zonesRouter = require('./routes/zones');
 const settingsRouter = require('./routes/settings');
 const analyticsRouter = require('./routes/analytics');
 const storefrontRouter = require('./routes/storefront');
+const authRouter = require('./routes/auth');
 
 // Register API routes
+app.use('/api/auth', authRouter);
+app.use('/api/stores', storesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/categories', categoriesRouter);
 app.use('/api/orders', ordersRouter);

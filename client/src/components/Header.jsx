@@ -7,13 +7,14 @@ import {
   MessageCircle,
   Clock,
   Volume2,
-  VolumeX
+  VolumeX,
+  LogOut
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 import { useTheme } from '../context/ThemeContext';
 
 export default function Header({ onMenuClick }) {
-  const { settings, refreshAllData, loading, showToast, updateSettings } = useAdmin();
+  const { settings, refreshAllData, loading, showToast, updateSettings, adminUser, logout } = useAdmin();
   const { isDark, toggleTheme } = useTheme();
   const [time, setTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 
@@ -101,19 +102,26 @@ export default function Header({ onMenuClick }) {
           {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-gray-600" />}
         </button>
 
-        {/* Admin Profile */}
+        {/* Admin Profile & Logout */}
         <div className="flex items-center gap-2 pl-3 ml-1 border-l border-gray-200 dark:border-zinc-800">
           <div className="w-8 h-8 rounded-lg bg-amber-500 text-black font-bold flex items-center justify-center text-xs shadow-sm">
-            BG
+            {adminUser?.name ? adminUser.name.slice(0, 2).toUpperCase() : 'BG'}
           </div>
           <div className="hidden md:block text-left">
             <p className="text-xs font-semibold text-gray-900 dark:text-white leading-tight">
-              Admin
+              {adminUser?.name || 'Administrator'}
             </p>
             <p className="text-[11px] text-gray-500 dark:text-zinc-400">
-              Manager
+              {adminUser?.role || 'Store Superadmin'}
             </p>
           </div>
+          <button
+            onClick={logout}
+            title="Sign Out (Admin)"
+            className="p-1.5 ml-1 rounded-lg border border-gray-200 dark:border-zinc-700 text-gray-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+          </button>
         </div>
       </div>
     </header>

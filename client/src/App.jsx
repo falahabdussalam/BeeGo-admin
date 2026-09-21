@@ -5,8 +5,10 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Toast from './components/Toast';
 
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
+import Stores from './pages/Stores';
 import Orders from './pages/Orders';
 import Categories from './pages/Categories';
 import Coupons from './pages/Coupons';
@@ -25,6 +27,8 @@ function AdminShell() {
         return <Dashboard />;
       case 'products':
         return <Products />;
+      case 'stores':
+        return <Stores />;
       case 'orders':
         return <Orders />;
       case 'categories':
@@ -76,12 +80,28 @@ function AdminShell() {
   );
 }
 
+function AuthGate() {
+  const { isAuthenticated, toast } = useAdmin();
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Login />
+        <Toast toast={toast} onClose={() => {}} />
+      </>
+    );
+  }
+
+  return <AdminShell />;
+}
+
 export default function App() {
   return (
     <ThemeProvider>
       <AdminProvider>
-        <AdminShell />
+        <AuthGate />
       </AdminProvider>
     </ThemeProvider>
   );
 }
+

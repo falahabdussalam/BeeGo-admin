@@ -4,6 +4,7 @@ import {
   ShoppingBag,
   Package,
   FolderTree,
+  Store,
   Tag,
   MapPin,
   BarChart3,
@@ -11,12 +12,13 @@ import {
   Settings,
   ExternalLink,
   Power,
+  LogOut,
   X
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
 
 export default function Sidebar({ isOpen, onClose }) {
-  const { activeTab, setActiveTab, orders, products, settings, toggleStoreOpenStatus } = useAdmin();
+  const { activeTab, setActiveTab, orders, products, stores, settings, toggleStoreOpenStatus, logout, adminUser } = useAdmin();
 
   const pendingOrdersCount = orders.filter(o => ['pending', 'confirmed', 'preparing', 'out_for_delivery'].includes(o.orderStatus)).length;
 
@@ -24,6 +26,7 @@ export default function Sidebar({ isOpen, onClose }) {
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'orders', label: 'Orders', icon: ShoppingBag, badge: pendingOrdersCount ? `${pendingOrdersCount}` : null },
     { id: 'products', label: 'Products', icon: Package, badge: products.length ? `${products.length}` : null },
+    { id: 'stores', label: 'Stores & Outlets', icon: Store, badge: stores.length ? `${stores.length}` : null },
     { id: 'categories', label: 'Categories', icon: FolderTree },
     { id: 'coupons', label: 'Coupons', icon: Tag },
     { id: 'delivery', label: 'Delivery & Riders', icon: MapPin },
@@ -138,7 +141,7 @@ export default function Sidebar({ isOpen, onClose }) {
           })}
         </nav>
 
-        {/* Footer / Storefront Link */}
+        {/* Footer / Storefront Link & Sign Out */}
         <div className="p-3 border-t border-gray-200 dark:border-zinc-800 space-y-2">
           <a
             href="https://bee-go.vercel.app"
@@ -150,7 +153,17 @@ export default function Sidebar({ isOpen, onClose }) {
             <ExternalLink className="w-3.5 h-3.5 text-gray-400" />
           </a>
 
-          <div className="flex items-center justify-between px-1 text-[11px] text-gray-500 dark:text-zinc-400">
+          <button
+            onClick={logout}
+            className="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-rose-200 dark:border-rose-900/60 bg-rose-50/60 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-900/40 text-xs font-semibold text-rose-700 dark:text-rose-300 transition-colors cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Sign Out (Admin)</span>
+            </div>
+          </button>
+
+          <div className="flex items-center justify-between px-1 text-[11px] text-gray-500 dark:text-zinc-400 pt-0.5">
             <span>BeeGo Panel</span>
             <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />

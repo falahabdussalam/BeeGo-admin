@@ -102,6 +102,54 @@ const initialCategories = [
     bannerImage: 'https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=800&q=80'
   }
 ];
+const initialStores = [
+  {
+    id: 'store-1',
+    name: 'Virajpete Express Central',
+    category: 'groceries',
+    phone: '+91 8105326568',
+    address: 'Main Bazaar Road, Clock Tower, Virajpete, Kodagu 571218',
+    deliveryTime: '20-30 mins',
+    minOrder: 99,
+    rating: 4.9,
+    reviewCount: 142,
+    isOpen: true,
+    isActive: true,
+    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80',
+    description: 'Central hub for ultra-fast grocery and daily essentials delivery in Virajpete town.'
+  },
+  {
+    id: 'store-2',
+    name: 'BeeGo Fresh Grocers',
+    category: 'fruits-vegetables',
+    phone: '+91 8105326568',
+    address: 'College Road, Near Private Bus Stand, Virajpete 571218',
+    deliveryTime: '15-25 mins',
+    minOrder: 49,
+    rating: 4.8,
+    reviewCount: 88,
+    isOpen: true,
+    isActive: true,
+    image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=600&q=80',
+    description: 'Farm-fresh organic fruits, local greens, and farm produce.'
+  },
+  {
+    id: 'store-3',
+    name: 'Coorg Heritage Spices & Coffee',
+    category: 'coorg-specials',
+    phone: '+91 8105326568',
+    address: 'Clock Tower Junction, Virajpete 571218',
+    deliveryTime: '25-35 mins',
+    minOrder: 149,
+    rating: 5.0,
+    reviewCount: 65,
+    isOpen: true,
+    isActive: true,
+    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80',
+    description: 'Authentic estate-grown Coorg coffee, wild forest honey, homemade chocolates and spices.'
+  }
+];
+
 const initialProducts = [];
 const initialCoupons = [];
 const initialZones = [];
@@ -135,6 +183,7 @@ const initialSettings = {
 
 module.exports = {
   initialCategories,
+  initialStores,
   initialProducts,
   initialCoupons,
   initialZones,

@@ -13,6 +13,54 @@ const DEFAULT_CATEGORIES = [
   { id: 'household', name: 'Household Needs', icon: '🧹', itemCount: 0, isActive: true }
 ];
 
+const DEFAULT_STORES = [
+  {
+    id: 'store-1',
+    name: 'Virajpete Express Central',
+    category: 'groceries',
+    phone: '+91 8105326568',
+    address: 'Main Bazaar Road, Clock Tower, Virajpete, Kodagu 571218',
+    deliveryTime: '20-30 mins',
+    minOrder: 99,
+    rating: 4.9,
+    reviewCount: 142,
+    isOpen: true,
+    isActive: true,
+    image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80',
+    description: 'Central hub for ultra-fast grocery and daily essentials delivery in Virajpete town.'
+  },
+  {
+    id: 'store-2',
+    name: 'BeeGo Fresh Grocers',
+    category: 'fruits-vegetables',
+    phone: '+91 8105326568',
+    address: 'College Road, Near Private Bus Stand, Virajpete 571218',
+    deliveryTime: '15-25 mins',
+    minOrder: 49,
+    rating: 4.8,
+    reviewCount: 88,
+    isOpen: true,
+    isActive: true,
+    image: 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=600&q=80',
+    description: 'Farm-fresh organic fruits, local greens, and farm produce.'
+  },
+  {
+    id: 'store-3',
+    name: 'Coorg Heritage Spices & Coffee',
+    category: 'coorg-specials',
+    phone: '+91 8105326568',
+    address: 'Clock Tower Junction, Virajpete 571218',
+    deliveryTime: '25-35 mins',
+    minOrder: 149,
+    rating: 5.0,
+    reviewCount: 65,
+    isOpen: true,
+    isActive: true,
+    image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80',
+    description: 'Authentic estate-grown Coorg coffee, wild forest honey, homemade chocolates and spices.'
+  }
+];
+
 const DEFAULT_SETTINGS = {
   storeName: 'BeeGo Store',
   storeTagline: 'Fast & Reliable Online Ordering',
@@ -317,16 +365,66 @@ function handleOfflineFallback(path, options = {}) {
     };
   }
 
+  // --- Stores ---
+  if (path.startsWith('/stores')) {
+    let stores = offline.get('stores', DEFAULT_STORES);
+    if (method === 'GET') {
+      return { success: true, count: stores.length, data: stores };
+    }
+    if (method === 'POST') {
+      const newStore = {
+        ...body,
+        id: body.id || 'store-' + Date.now(),
+        isOpen: true,
+        isActive: true,
+        rating: 4.9,
+        reviewCount: 1,
+        createdAt: new Date().toISOString()
+      };
+      stores = [...stores, newStore];
+      offline.set('stores', stores);
+      return { success: true, message: 'Store added locally', data: newStore };
+    }
+    if (method === 'PUT') {
+      const id = path.split('/')[2];
+      stores = stores.map(s => s.id === id ? { ...s, ...body } : s);
+      offline.set('stores', stores);
+      return { success: true, message: 'Store updated locally', data: stores.find(s => s.id === id) };
+    }
+    if (method === 'DELETE') {
+      const id = path.split('/')[2];
+      stores = stores.filter(s => s.id !== id);
+      offline.set('stores', stores);
+      return { success: true, message: 'Store removed locally' };
+    }
+  }
+
+  // --- Auth ---
+  if (path.startsWith('/auth/login')) {
+    const { email, username, password } = body;
+    const user = (email || username || '').toLowerCase().trim();
+    if ((user === 'admin@beego.com' || user === 'admin') && password === 'admin123') {
+      return {
+        success: true,
+        token: 'beego-offline-token-' + Date.now(),
+        user: { name: 'BeeGo Administrator', email: 'admin@beego.com', role: 'Store Superadmin' }
+      };
+    }
+    throw new Error('Invalid admin credentials. Please use admin@beego.com / admin123');
+  }
+
   // --- Storefront Catalog ---
   if (path.startsWith('/storefront/catalog')) {
     const prods = offline.get('products', []);
     const cats = offline.get('categories', DEFAULT_CATEGORIES);
+    const stores = offline.get('stores', DEFAULT_STORES);
     const sett = offline.get('settings', DEFAULT_SETTINGS);
     const cpn = offline.get('coupons', []);
     const zones = offline.get('zones', []);
     return {
       success: true,
       store: sett,
+      stores,
       categories: cats,
       products: prods,
       coupons: cpn,
@@ -338,6 +436,17 @@ function handleOfflineFallback(path, options = {}) {
 }
 
 export const api = {
+  // Auth
+  loginAdmin: (creds) => fetchJson('/auth/login', { method: 'POST', body: JSON.stringify(creds) }),
+  checkAdminAuth: () => fetchJson('/auth/me'),
+
+  // Stores & Outlets
+  getStores: () => fetchJson('/stores'),
+  getStore: (id) => fetchJson(`/stores/${id}`),
+  createStore: (store) => fetchJson('/stores', { method: 'POST', body: JSON.stringify(store) }),
+  updateStore: (id, store) => fetchJson(`/stores/${id}`, { method: 'PUT', body: JSON.stringify(store) }),
+  deleteStore: (id) => fetchJson(`/stores/${id}`, { method: 'DELETE' }),
+
   // Products
   getProducts: (params = {}) => {
     const query = new URLSearchParams(params).toString();

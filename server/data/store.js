@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const {
   initialCategories,
+  initialStores,
   initialProducts,
   initialCoupons,
   initialZones,
@@ -16,6 +17,7 @@ class Store {
   constructor() {
     this.data = {
       categories: [],
+      stores: [],
       products: [],
       coupons: [],
       zones: [],
@@ -32,6 +34,10 @@ class Store {
       if (fs.existsSync(DATA_FILE)) {
         const raw = fs.readFileSync(DATA_FILE, 'utf8');
         this.data = JSON.parse(raw);
+        if (!this.data.stores || !Array.isArray(this.data.stores) || this.data.stores.length === 0) {
+          this.data.stores = [...initialStores];
+          this.save();
+        }
         console.log('📦 Loaded database from store.json');
       } else {
         this.resetToDefault();
@@ -53,6 +59,7 @@ class Store {
   resetToDefault() {
     this.data = {
       categories: [...initialCategories],
+      stores: [...initialStores],
       products: [...initialProducts],
       coupons: [...initialCoupons],
       zones: [...initialZones],
@@ -112,27 +119,36 @@ class Store {
   }
 
   createProduct(productData) {
+    const assignedStore = this.data.stores?.find(s => s.id === productData.storeId);
+    const storeName = productData.storeName || assignedStore?.name || this.data.settings?.storeName || 'Virajpete Express Central';
+    const storeId = productData.storeId || assignedStore?.id || this.data.stores?.[0]?.id || 'store-1';
+
     const newProduct = {
       id: productData.id || 'prod-' + Date.now(),
       name: productData.name || 'Untitled Item',
       category: productData.category || 'groceries',
+      storeId,
+      storeName,
       price: Number(productData.price) || 0,
       originalPrice: Number(productData.originalPrice) || Number(productData.price) || 0,
+      discountPercentage: productData.discountPercentage !== undefined ? Number(productData.discountPercentage) : 0,
       unit: productData.unit || '1 Unit',
       stock: Number(productData.stock) || 10,
       inStock: productData.inStock !== undefined ? Boolean(productData.inStock) : true,
       isPopular: Boolean(productData.isPopular),
+      isVeg: productData.isVeg !== undefined ? Boolean(productData.isVeg) : true,
       rating: Number(productData.rating) || 4.8,
       reviewCount: Number(productData.reviewCount) || 1,
       badge: productData.badge || '',
       prepTime: productData.prepTime || '15-20 mins',
+      deliveryTime: productData.deliveryTime || productData.prepTime || '15-20 mins',
       description: productData.description || '',
       image: productData.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80',
       createdAt: new Date().toISOString()
     };
     this.data.products.unshift(newProduct);
     this.updateCategoryItemCount(newProduct.category);
-    this.logActivity('Product Added', `Added product: ${newProduct.name}`);
+    this.logActivity('Product Added', `Added product: ${newProduct.name} (${storeName})`);
     this.save();
     return newProduct;
   }
@@ -142,12 +158,21 @@ class Store {
     if (idx === -1) return null;
 
     const oldCategory = this.data.products[idx].category;
+    let storeName = updates.storeName;
+    if (updates.storeId && !storeName) {
+      const matchStore = this.data.stores?.find(s => s.id === updates.storeId);
+      if (matchStore) storeName = matchStore.name;
+    }
+
     this.data.products[idx] = {
       ...this.data.products[idx],
       ...updates,
+      storeName: storeName || this.data.products[idx].storeName,
       price: updates.price !== undefined ? Number(updates.price) : this.data.products[idx].price,
       originalPrice: updates.originalPrice !== undefined ? Number(updates.originalPrice) : this.data.products[idx].originalPrice,
       stock: updates.stock !== undefined ? Number(updates.stock) : this.data.products[idx].stock,
+      deliveryTime: updates.deliveryTime || updates.prepTime || this.data.products[idx].deliveryTime,
+      prepTime: updates.prepTime || updates.deliveryTime || this.data.products[idx].prepTime,
       updatedAt: new Date().toISOString()
     };
 
@@ -176,6 +201,80 @@ class Store {
     if (cat) {
       cat.itemCount = this.data.products.filter(p => p.category === categoryId).length;
     }
+  }
+
+  // --- Stores & Outlets ---
+  getStores() {
+    if (!this.data.stores) this.data.stores = [];
+    return this.data.stores.map(s => {
+      const itemCount = this.data.products.filter(p => p.storeId === s.id || p.storeName === s.name).length;
+      return { ...s, itemCount };
+    });
+  }
+
+  getStoreById(id) {
+    const store = this.data.stores?.find(s => s.id === id);
+    if (!store) return null;
+    const itemCount = this.data.products.filter(p => p.storeId === store.id || p.storeName === store.name).length;
+    return { ...store, itemCount };
+  }
+
+  createStore(storeData) {
+    const newStore = {
+      id: storeData.id || 'store-' + Date.now(),
+      name: storeData.name || 'BeeGo Outlet',
+      category: storeData.category || 'groceries',
+      phone: storeData.phone || this.data.settings?.whatsappNumber || '+91 8105326568',
+      address: storeData.address || 'Virajpete, Kodagu',
+      deliveryTime: storeData.deliveryTime || '20-30 mins',
+      minOrder: Number(storeData.minOrder) || 99,
+      rating: Number(storeData.rating) || 4.9,
+      reviewCount: Number(storeData.reviewCount) || 10,
+      isOpen: storeData.isOpen !== undefined ? Boolean(storeData.isOpen) : true,
+      isActive: storeData.isActive !== undefined ? Boolean(storeData.isActive) : true,
+      image: storeData.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80',
+      description: storeData.description || 'Partner store in Virajpete Town',
+      createdAt: new Date().toISOString()
+    };
+    if (!this.data.stores) this.data.stores = [];
+    this.data.stores.push(newStore);
+    this.logActivity('Store Added', `Added partner store/outlet: ${newStore.name}`);
+    this.save();
+    return newStore;
+  }
+
+  updateStore(id, updates) {
+    const idx = this.data.stores?.findIndex(s => s.id === id);
+    if (idx === -1 || idx === undefined) return null;
+    const oldName = this.data.stores[idx].name;
+
+    this.data.stores[idx] = {
+      ...this.data.stores[idx],
+      ...updates,
+      minOrder: updates.minOrder !== undefined ? Number(updates.minOrder) : this.data.stores[idx].minOrder,
+      rating: updates.rating !== undefined ? Number(updates.rating) : this.data.stores[idx].rating,
+      updatedAt: new Date().toISOString()
+    };
+
+    // If store name changed, update corresponding products
+    if (updates.name && updates.name !== oldName) {
+      this.data.products.forEach(p => {
+        if (p.storeId === id) p.storeName = updates.name;
+      });
+    }
+
+    this.logActivity('Store Updated', `Updated store: ${this.data.stores[idx].name}`);
+    this.save();
+    return this.data.stores[idx];
+  }
+
+  deleteStore(id) {
+    const idx = this.data.stores?.findIndex(s => s.id === id);
+    if (idx === -1 || idx === undefined) return false;
+    const removed = this.data.stores.splice(idx, 1)[0];
+    this.logActivity('Store Deleted', `Deleted store: ${removed.name}`);
+    this.save();
+    return true;
   }
 
   // --- Categories ---
@@ -498,6 +597,7 @@ class Store {
 
   clearAllData() {
     this.data.products = [];
+    this.data.stores = [];
     this.data.categories = [];
     this.data.orders = [];
     this.data.coupons = [];

@@ -7,6 +7,7 @@ router.get('/catalog', (req, res) => {
   try {
     const settings = store.getSettings();
     const categories = store.getCategories().filter(c => c.isActive !== false);
+    const stores = store.getStores().filter(s => s.isActive !== false);
     const rawProducts = store.getProducts();
     const coupons = store.getCoupons().filter(c => c.isActive !== false);
     const zones = store.getZones().filter(z => z.isActive !== false);
@@ -19,9 +20,14 @@ router.get('/catalog', (req, res) => {
         discountPercentage = Math.round(((origPrice - currPrice) / origPrice) * 100);
       }
 
+      const matchStore = stores.find(s => s.id === p.storeId);
+      const resolvedStoreName = p.storeName || matchStore?.name || settings.storeName || 'Virajpete Express';
+
       return {
         ...p,
-        deliveryTime: p.deliveryTime || p.prepTime || '15-20 mins',
+        storeId: p.storeId || matchStore?.id || stores[0]?.id || 'store-1',
+        storeName: resolvedStoreName,
+        deliveryTime: p.deliveryTime || matchStore?.deliveryTime || p.prepTime || '15-20 mins',
         prepTime: p.prepTime || p.deliveryTime || '15-20 mins',
         stockCount: p.stock !== undefined ? Number(p.stock) : (p.stockCount !== undefined ? Number(p.stockCount) : 10),
         stock: p.stock !== undefined ? Number(p.stock) : (p.stockCount !== undefined ? Number(p.stockCount) : 10),
@@ -29,8 +35,7 @@ router.get('/catalog', (req, res) => {
         isVeg: p.isVeg !== undefined ? Boolean(p.isVeg) : true,
         discountPercentage: discountPercentage || 0,
         rating: Number(p.rating) || 4.8,
-        reviewCount: Number(p.reviewCount) || 1,
-        storeName: p.storeName || settings.storeName || 'BeeGo Store'
+        reviewCount: Number(p.reviewCount) || 1
       };
     });
 
@@ -48,6 +53,7 @@ router.get('/catalog', (req, res) => {
         freeDeliveryThreshold: settings.freeDeliveryThreshold || 199,
         avgDeliveryMinutes: settings.avgDeliveryMinutes || 30
       },
+      stores,
       categories,
       products,
       coupons,

@@ -15,10 +15,12 @@ const PRESET_IMAGES = [
 ];
 
 export default function ProductModal({ isOpen, onClose, product = null, onSaved }) {
-  const { categories, showToast, refreshAllData } = useAdmin();
+  const { categories, stores, showToast, refreshAllData } = useAdmin();
   const [formData, setFormData] = useState({
     name: '',
     category: '',
+    storeId: '',
+    storeName: '',
     price: '',
     originalPrice: '',
     unit: '1 Unit',
@@ -33,10 +35,13 @@ export default function ProductModal({ isOpen, onClose, product = null, onSaved 
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    const defaultStore = stores[0] || { id: 'store-1', name: 'Virajpete Express Central' };
     if (product) {
       setFormData({
         name: product.name || '',
         category: product.category || (categories[0]?.id || 'general'),
+        storeId: product.storeId || defaultStore.id,
+        storeName: product.storeName || defaultStore.name,
         price: product.price || '',
         originalPrice: product.originalPrice || product.price || '',
         unit: product.unit || '1 Unit',
@@ -52,6 +57,8 @@ export default function ProductModal({ isOpen, onClose, product = null, onSaved 
       setFormData({
         name: '',
         category: categories[0]?.id || 'general',
+        storeId: defaultStore.id,
+        storeName: defaultStore.name,
         price: '',
         originalPrice: '',
         unit: '1 Unit',
@@ -64,7 +71,7 @@ export default function ProductModal({ isOpen, onClose, product = null, onSaved 
         image: ''
       });
     }
-  }, [product, categories]);
+  }, [product, categories, stores]);
 
   if (!isOpen) return null;
 
@@ -77,9 +84,12 @@ export default function ProductModal({ isOpen, onClose, product = null, onSaved 
 
     try {
       setSaving(true);
+      const matchedStore = stores.find(s => s.id === formData.storeId);
       const payload = {
         ...formData,
         category: formData.category || 'general',
+        storeId: formData.storeId || matchedStore?.id || 'store-1',
+        storeName: matchedStore?.name || formData.storeName || 'Virajpete Express Central',
         price: Number(formData.price),
         originalPrice: formData.originalPrice ? Number(formData.originalPrice) : Number(formData.price),
         stock: Number(formData.stock)
@@ -131,8 +141,8 @@ export default function ProductModal({ isOpen, onClose, product = null, onSaved 
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
-          {/* Name & Category */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Name, Category & Store */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="control-label">
                 Product Name <span className="text-rose-500">*</span>
@@ -170,6 +180,41 @@ export default function ProductModal({ isOpen, onClose, product = null, onSaved 
                   value={formData.category}
                   onChange={e => setFormData({ ...formData, category: e.target.value })}
                   placeholder="e.g. Groceries"
+                  className="control-input"
+                />
+              )}
+            </div>
+
+            <div>
+              <label className="control-label">
+                Partner Store / Outlet
+              </label>
+              {stores.length > 0 ? (
+                <select
+                  value={formData.storeId}
+                  onChange={e => {
+                    const selectedId = e.target.value;
+                    const st = stores.find(s => s.id === selectedId);
+                    setFormData({
+                      ...formData,
+                      storeId: selectedId,
+                      storeName: st?.name || formData.storeName
+                    });
+                  }}
+                  className="control-select"
+                >
+                  {stores.map(s => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={formData.storeName}
+                  onChange={e => setFormData({ ...formData, storeName: e.target.value })}
+                  placeholder="Virajpete Express Central"
                   className="control-input"
                 />
               )}
